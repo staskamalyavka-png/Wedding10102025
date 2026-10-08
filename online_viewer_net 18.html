@@ -1,0 +1,1575 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Комната воспоминаний · Максим &amp; Анастасия · 10.10.2025</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500;1,700&family=Caveat:wght@400;500;600;700&family=Inter:wght@300;400;500&family=Great+Vibes&family=Pinyon+Script&family=Parisienne&display=swap" rel="stylesheet">
+<style>
+:root{
+  --gold:#c8a24a;--gold-deep:#a8801f;
+  --peach:#fae0cc;--peach-soft:#fcecdf;--peach-mid:#f8d8c8;
+  --forest:#24422e;--ink:#3a2418;
+  --font-title:'Cormorant Garamond',Georgia,serif;
+  --font-hand:'Caveat',cursive;
+  --font-script:'Pinyon Script','Great Vibes',cursive;
+  --font-soft:'Parisienne',cursive;
+  --font-ui:'Inter',system-ui,sans-serif;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html,body{
+  -webkit-text-size-adjust:100%;background:#f0e6d6;color:var(--ink);
+  font-family:var(--font-ui);font-weight:300;
+  overflow:hidden;height:100vh;height:100dvh;
+  user-select:none;-webkit-user-select:none;
+}
+button{font-family:inherit;border:0;background:transparent;cursor:pointer;color:inherit;-webkit-tap-highlight-color:transparent;}
+canvas{display:block;position:fixed;inset:0;touch-action:none;}
+
+/* ── Загрузчик ── */
+.loader{position:fixed;inset:0;z-index:9999;display:flex;align-items:center;justify-content:center;background:radial-gradient(circle at 50% 40%, #faf3e6 0%, #e8dcc6 100%);transition:opacity .7s,visibility .7s;}
+.loader.hide{opacity:0;visibility:hidden;pointer-events:none;}
+.loader-inner{text-align:center;padding:0 24px;max-width:640px;}
+.loader-script{font-family:var(--font-script);font-size:clamp(40px,10vw,68px);color:var(--ink);margin-bottom:22px;opacity:0;animation:fu .9s ease .1s forwards;line-height:1.05;}
+.loader-hair{width:0;height:1px;margin:0 auto 22px;background:linear-gradient(90deg,transparent,var(--gold),transparent);animation:gl 1.1s cubic-bezier(.5,0,.2,1) .3s forwards;}
+.loader-names{font-family:var(--font-title);font-style:italic;font-weight:500;font-size:clamp(24px,5.5vw,34px);color:var(--gold-deep);margin-bottom:12px;opacity:0;animation:fu .9s ease .55s forwards;}
+.loader-date{font-size:11px;letter-spacing:.5em;text-transform:uppercase;color:rgba(58,36,24,.65);padding-left:.5em;opacity:0;animation:fu .9s ease .75s forwards;}
+.loader-hint{font-family:var(--font-soft);font-size:clamp(20px,4.5vw,26px);color:rgba(58,36,24,.6);margin-top:22px;opacity:0;animation:fu .9s ease 1.1s forwards;line-height:1.35;}
+@keyframes fu{from{opacity:0;transform:translateY(12px);}to{opacity:1;transform:none;}}
+@keyframes gl{from{width:0;}to{width:min(320px,62vw);}}
+
+/* ── Дверь ── */
+.door-screen{position:fixed;inset:0;z-index:100;display:flex;align-items:center;justify-content:center;overflow:hidden;background:radial-gradient(ellipse 80% 60% at 50% 45%, #faf3e6 0%, #ecdfc4 55%, #d9c8a8 100%);transition:opacity 1s ease, transform 1s ease;}
+.door-screen.opening{opacity:0;transform:scale(1.05);pointer-events:none;}
+.door-titles{position:absolute;top:5%;left:0;right:0;text-align:center;z-index:5;pointer-events:none;}
+.door-eyebrow{font-size:10px;letter-spacing:.5em;text-transform:uppercase;color:rgba(58,36,24,.55);padding-left:.5em;margin-bottom:10px;}
+.door-names{font-family:var(--font-script);font-weight:400;font-size:clamp(46px,11vw,90px);line-height:1;color:var(--ink);text-shadow:0 1px 0 rgba(255,255,255,.6);}
+.door-names em{color:#d4a860;font-family:var(--font-soft);font-style:italic;margin:0 4px;font-size:.9em;}
+.door-date{font-size:10px;letter-spacing:.42em;text-transform:uppercase;color:rgba(58,36,24,.55);padding-left:.42em;margin-top:10px;}
+.door-arch-wrap{position:relative;width:min(640px,90vw);height:min(820px,80vh);display:flex;align-items:flex-end;justify-content:center;}
+.door-arch{position:absolute;inset:0;border:1px solid rgba(200,162,74,.4);border-radius:50% 50% 0 0 / 42% 42% 0 0;box-shadow:inset 0 0 70px rgba(200,162,74,.08),0 20px 50px rgba(120,90,40,.18);pointer-events:none;}
+.door-arch::before{content:'';position:absolute;inset:12px 12px 0;border:1px solid rgba(200,162,74,.2);border-radius:50% 50% 0 0 / 42% 42% 0 0;}
+.door-arch::after{content:'';position:absolute;inset:26px 26px 0;border:1px dashed rgba(200,162,74,.28);border-radius:50% 50% 0 0 / 42% 42% 0 0;}
+.door{position:relative;width:min(380px,66vw);height:min(560px,56vh);display:flex;z-index:3;perspective:1200px;}
+.door-leaf{position:relative;flex:1 1 50%;background:linear-gradient(180deg,#fcf7ee 0%,#f2e8d2 55%,#e8d9ba 100%);box-shadow:inset 0 0 0 1px rgba(200,162,74,.5),0 16px 36px rgba(120,90,40,.22);transition:transform 1.2s cubic-bezier(.65,.02,.25,1);transform-origin:center;overflow:hidden;backface-visibility:hidden;-webkit-backface-visibility:hidden;}
+.door-leaf.left{border-right:1px solid rgba(160,128,60,.35);border-radius:6px 0 0 6px;transform-origin:left center;}
+.door-leaf.right{border-left:1px solid rgba(160,128,60,.35);border-radius:0 6px 6px 0;transform-origin:right center;}
+.door-screen.opening .door-leaf.left{transform:rotateY(-95deg);}
+.door-screen.opening .door-leaf.right{transform:rotateY(95deg);}
+.door-leaf::before{content:'';position:absolute;inset:14px;border:1px solid rgba(200,162,74,.35);border-radius:4px;pointer-events:none;}
+.door-leaf::after{content:'';position:absolute;inset:30px 26px;border:1px solid rgba(200,162,74,.22);border-radius:3px;box-shadow:inset 0 0 0 7px rgba(244,194,168,.15);pointer-events:none;}
+.door-handle{position:absolute;top:52%;width:12px;height:12px;border-radius:50%;background:radial-gradient(circle at 35% 30%, #f4e4b8 0%, #c8a24a 55%, #8a6a1f 100%);box-shadow:0 0 0 2px rgba(200,162,74,.35),0 2px 5px rgba(120,90,40,.5);z-index:4;}
+.door-handle::after{content:'';position:absolute;top:100%;left:50%;width:5px;height:30px;transform:translateX(-50%);background:linear-gradient(180deg,#c8a24a 0%,#8a6a1f 100%);border-radius:3px;}
+.door-leaf.left .door-handle{right:9px;}
+.door-leaf.right .door-handle{left:9px;}
+.door-glow{position:absolute;inset:0;pointer-events:none;z-index:2;transition:opacity .6s ease;opacity:0;}
+.door-screen.opening .door-glow{opacity:1;background:radial-gradient(ellipse at 50% 55%, rgba(255,235,190,.95) 0%, rgba(255,220,160,.5) 40%, transparent 75%);}
+.door-wreath{position:absolute;top:22%;width:74px;height:74px;pointer-events:none;z-index:2;}
+.door-wreath.left{left:7%;}
+.door-wreath.right{right:7%;}
+.door-wreath svg{width:100%;height:100%;filter:drop-shadow(0 4px 10px rgba(90,60,20,.25));}
+.hanging-vine{position:fixed;top:0;bottom:0;width:min(200px,24vw);pointer-events:none;z-index:4;}
+.hanging-vine.left{left:2%;}
+.hanging-vine.right{right:2%;transform:scaleX(-1);}
+.hanging-vine svg{width:100%;height:100%;display:block;overflow:visible;}
+.door-hint{position:absolute;bottom:6%;left:0;right:0;text-align:center;font-family:var(--font-soft);font-size:26px;color:rgba(58,36,24,.72);z-index:7;animation:hintPulse 2.4s ease-in-out infinite;}
+.door-hint .key{display:inline-block;color:var(--gold-deep);margin:0 8px;font-size:20px;font-family:var(--font-hand);}
+@keyframes hintPulse{0%,100%{opacity:.55;}50%{opacity:1;}}
+
+/* ── Верхняя панель ── */
+.ui-top{position:fixed;top:0;left:0;right:0;z-index:10;padding:20px 24px 40px;text-align:center;pointer-events:none;background:linear-gradient(to bottom, rgba(245,237,225,.85), transparent);opacity:0;transition:opacity .8s ease .4s;}
+.ui-top.show{opacity:1;}
+.ui-eyebrow{font-size:9px;letter-spacing:.5em;text-transform:uppercase;color:rgba(58,36,24,.55);padding-left:.5em;margin-bottom:6px;}
+.ui-names{
+  font-family:var(--font-script);font-weight:400;
+  font-size:clamp(28px,6vw,42px);line-height:1;color:var(--ink);
+  pointer-events:auto;cursor:pointer;
+  display:inline-block;padding:6px 14px;
+}
+.ui-names em{color:#d4a860;font-family:var(--font-soft);font-style:italic;margin:0 4px;font-size:.9em;}
+.ui-date{font-size:9px;letter-spacing:.4em;text-transform:uppercase;color:rgba(58,36,24,.5);padding-left:.4em;margin-top:5px;}
+
+/* ── Нижняя панель ── */
+.ui-bottom{position:fixed;bottom:0;left:0;right:0;z-index:10;padding:40px 20px 22px;text-align:center;pointer-events:none;background:linear-gradient(to top, rgba(245,237,225,.9), transparent);opacity:0;transition:opacity .8s ease .4s;}
+.ui-bottom.show{opacity:1;}
+.ui-hint{font-family:var(--font-soft);font-size:22px;color:rgba(58,36,24,.72);margin-bottom:10px;}
+.ui-hint .arr{display:inline-block;color:var(--gold-deep);font-size:18px;animation:bob 2.6s ease-in-out infinite;margin:0 6px;}
+@keyframes bob{0%,100%{transform:translateX(-4px);opacity:.6;}50%{transform:translateX(4px);opacity:1;}}
+.ui-actions{display:flex;justify-content:center;gap:10px;flex-wrap:wrap;pointer-events:auto;}
+.ui-btn{padding:9px 18px;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--ink);background:linear-gradient(180deg,#fcf7ee,#ecdfc4);border:1px solid rgba(200,162,74,.55);border-radius:24px;box-shadow:0 4px 12px rgba(120,90,40,.15);transition:all .25s;}
+.ui-btn:hover{box-shadow:0 0 18px rgba(200,162,74,.4);}
+.ui-counter{margin-top:8px;font-family:var(--font-title);font-style:italic;font-size:13px;letter-spacing:.22em;color:rgba(58,36,24,.6);}
+.ui-counter .num{color:var(--gold-deep);font-family:var(--font-script);font-style:normal;font-size:22px;letter-spacing:0;vertical-align:-3px;margin:0 2px;}
+
+/* ── Кнопка звука ── */
+.mute-btn{position:fixed;top:14px;right:14px;z-index:40;width:42px;height:42px;display:grid;place-items:center;background:rgba(252,247,238,.85);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);border:1px solid rgba(200,162,74,.5);border-radius:50%;box-shadow:0 4px 14px rgba(120,90,40,.15);transition:all .25s;opacity:0;pointer-events:none;}
+.mute-btn.show{opacity:1;pointer-events:auto;}
+.mute-btn svg{width:20px;height:20px;stroke:var(--ink);fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;}
+.mute-btn.muted .sound-on{display:none;}
+.mute-btn:not(.muted) .sound-off{display:none;}
+
+/* ── Подсказка-тип ── */
+.tip{position:fixed;top:50%;left:50%;z-index:20;transform:translate(-50%,-50%);padding:16px 28px;background:rgba(252,247,238,.92);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);border:1px solid rgba(200,162,74,.45);border-radius:50px;font-family:var(--font-soft);font-size:26px;color:var(--ink);white-space:nowrap;pointer-events:none;opacity:0;display:flex;align-items:center;gap:12px;}
+.tip.show{animation:tipShow 3.2s ease forwards;}
+.tip-cursor{width:22px;height:22px;flex:0 0 auto;border-radius:50%;border:2px solid var(--gold-deep);position:relative;animation:tipPulse 1.4s ease-in-out infinite;}
+.tip-cursor::after{content:'';position:absolute;inset:5px;background:var(--gold-deep);border-radius:50%;}
+@keyframes tipPulse{0%,100%{transform:scale(1);opacity:.85;}50%{transform:scale(1.25);opacity:1;}}
+@keyframes tipShow{0%{opacity:0;transform:translate(-50%,-40%);}12%,78%{opacity:1;transform:translate(-50%,-50%);}100%{opacity:0;transform:translate(-50%,-55%);}}
+
+/* ── Просмотрщик фото ── */
+.viewer{position:fixed;inset:0;z-index:200;display:flex;align-items:center;justify-content:center;padding:64px 16px 40px;background:rgba(245,237,225,.96);-webkit-backdrop-filter:blur(18px);backdrop-filter:blur(18px);opacity:0;pointer-events:none;transition:opacity .35s ease;}
+.viewer.show{opacity:1;pointer-events:auto;}
+.viewer-fig{display:flex;flex-direction:column;align-items:center;gap:18px;max-width:100%;max-height:100%;opacity:0;transform:scale(.95);transition:opacity .4s,transform .5s cubic-bezier(.2,.9,.3,1);}
+.viewer.show .viewer-fig{opacity:1;transform:none;}
+.viewer-img{max-width:min(92vw,1000px);max-height:66vh;max-height:66dvh;width:auto;height:auto;object-fit:contain;background:#efe4d0;box-shadow:0 24px 60px rgba(120,90,40,.35),0 0 0 1px rgba(200,162,74,.5),0 0 0 7px #fcf7ee,0 0 0 8px rgba(200,162,74,.35);display:block;}
+.viewer-placeholder{width:min(92vw,720px);aspect-ratio:4/3;background:linear-gradient(150deg,#fcecdf 0%,#f8d8c8 100%);border:1px solid rgba(200,162,74,.5);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;color:#6b3418;box-shadow:0 24px 60px rgba(120,90,40,.35),0 0 0 7px #fcf7ee,0 0 0 8px rgba(200,162,74,.35);padding:24px;text-align:center;}
+.viewer-placeholder svg{width:52px;height:52px;opacity:.6;}
+.viewer-placeholder .ph-title{font-family:var(--font-soft);font-size:30px;}
+.viewer-placeholder .ph-hint{font-size:11px;letter-spacing:.22em;text-transform:uppercase;opacity:.6;}
+.viewer-caption{font-family:var(--font-soft);font-weight:400;font-size:clamp(24px,5.5vw,32px);line-height:1.2;color:var(--ink);max-width:min(92vw,720px);text-align:center;padding:0 8px;}
+.viewer-close{position:absolute;top:14px;right:14px;width:42px;height:42px;display:grid;place-items:center;font-size:24px;color:rgba(58,36,24,.6);background:rgba(255,255,255,.75);border:1px solid rgba(200,162,74,.5);border-radius:50%;box-shadow:0 4px 14px rgba(120,90,40,.2);transition:all .25s;}
+.viewer-close:hover{color:var(--ink);background:#fff;border-color:var(--gold);}
+.viewer-nav{position:absolute;top:50%;transform:translateY(-50%);width:48px;height:48px;display:grid;place-items:center;font-family:var(--font-title);font-size:30px;color:var(--ink);background:rgba(255,255,255,.75);border:1px solid rgba(200,162,74,.45);border-radius:50%;box-shadow:0 4px 14px rgba(120,90,40,.2);transition:all .25s;}
+.viewer-nav:hover{background:#fff;border-color:var(--gold);}
+.viewer-nav.prev{left:10px;}
+.viewer-nav.next{right:10px;}
+
+/* ── Финал ── */
+.finale{position:fixed;inset:0;z-index:150;background:radial-gradient(ellipse at 50% 42%, rgba(34,22,12,.96) 0%, rgba(8,5,3,.995) 78%);opacity:0;pointer-events:none;transition:opacity 1.4s ease;overflow:hidden;cursor:pointer;}
+.finale.show{opacity:1;pointer-events:auto;}
+.finale-inner{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:60px 24px 80px;text-align:center;opacity:1;transition:opacity .42s ease;}
+.finale-inner.fade{opacity:0;}
+.finale-text{font-family:var(--font-soft);font-size:clamp(28px,6.5vw,50px);line-height:1.3;color:#f7e4c4;text-shadow:0 2px 30px rgba(255,180,90,.28);max-width:780px;opacity:0;transform:translateY(16px);animation:finaleTextIn 1.05s cubic-bezier(.2,.8,.3,1) forwards;}
+.finale-text.gold{color:#ffd9a0;font-size:clamp(26px,6vw,44px);margin-top:22px;}
+.finale-text.small{font-family:var(--font-soft);font-size:clamp(22px,5vw,30px);margin-top:22px;color:#f7e4c4;line-height:1.3;}
+@keyframes finaleTextIn{to{opacity:1;transform:none;}}
+.finale-photo-wrap{position:relative;width:min(480px,86vw);margin:0 0 30px;border-radius:6px;overflow:hidden;background:linear-gradient(160deg,#2a1a10 0%,#4a2a18 100%);box-shadow:0 28px 90px rgba(0,0,0,.7),0 0 0 1px rgba(200,162,74,.5),0 0 0 8px rgba(28,16,8,.75),0 0 70px rgba(255,190,110,.14);opacity:0;transform:scale(.94) translateY(14px);animation:finalePhotoIn 1.25s cubic-bezier(.2,.8,.3,1) .08s forwards;}
+@keyframes finalePhotoIn{to{opacity:1;transform:none;}}
+.finale-photo{width:100%;height:100%;object-fit:cover;display:block;}
+.finale-photo-ph{position:absolute;inset:0;display:none;flex-direction:column;align-items:center;justify-content:center;gap:14px;padding:22px;text-align:center;color:rgba(247,228,196,.72);}
+.finale-photo-ph svg{width:64px;height:64px;opacity:.55;}
+.finale-photo-ph p{font-family:var(--font-soft);font-size:22px;letter-spacing:.04em;opacity:.72;}
+.finale-actions{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;margin-top:26px;opacity:0;animation:finaleTextIn 1s ease .55s forwards;}
+.btn{display:inline-block;padding:12px 28px;font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--ink);background:linear-gradient(180deg,#fcf7ee,#ecdfc4);border:1px solid rgba(200,162,74,.6);border-radius:26px;box-shadow:0 5px 15px rgba(120,90,40,.18);transition:all .25s;}
+.btn:hover{box-shadow:0 0 22px rgba(200,162,74,.45);}
+.btn.primary{background:linear-gradient(180deg,#fadcc8,#f2c8b0);border-color:#c8a24a;}
+.finale-hint{position:absolute;bottom:22px;left:0;right:0;text-align:center;font-family:var(--font-soft);font-size:22px;color:rgba(232,210,166,.62);pointer-events:none;animation:hintPulse 2.4s ease-in-out infinite;}
+.finale-hint.hide{display:none;}
+.finale-dots{position:absolute;top:20px;left:50%;transform:translateX(-50%);display:flex;gap:7px;pointer-events:none;}
+.finale-dot{width:6px;height:6px;border-radius:50%;background:rgba(232,210,166,.22);transition:background .35s, transform .35s;}
+.finale-dot.active{background:#e0b866;transform:scale(1.35);}
+
+/* ── Пасхалка ── */
+.easter-egg{
+  position:fixed;inset:0;z-index:250;
+  display:flex;align-items:center;justify-content:center;
+  background:rgba(20,12,6,.92);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);
+  opacity:0;pointer-events:none;transition:opacity .6s ease;padding:32px 24px;
+}
+.easter-egg.show{opacity:1;pointer-events:auto;}
+.easter-inner{
+  max-width:560px;width:100%;padding:48px 40px 36px;text-align:center;
+  background:linear-gradient(160deg,#fdf8ec,#f2e4c8);border-radius:6px;
+  box-shadow:0 30px 80px rgba(0,0,0,.75),0 0 0 1px rgba(200,162,74,.5),0 0 0 9px rgba(40,26,14,.4);
+  position:relative;
+}
+.easter-inner::before{content:'';position:absolute;inset:14px;border:1px solid rgba(200,162,74,.35);border-radius:4px;pointer-events:none;}
+.easter-ornament{width:140px;height:16px;margin:0 auto 18px;}
+.easter-ornament svg{width:100%;height:100%;}
+.easter-script{font-family:var(--font-script);font-size:clamp(34px,7vw,48px);color:#a8801f;margin-bottom:20px;line-height:1;}
+.easter-text{font-family:var(--font-title);font-style:italic;font-size:clamp(17px,3.5vw,20px);line-height:1.55;color:#3a2418;margin-bottom:26px;}
+.easter-text em{color:#a8801f;font-style:italic;font-weight:500;}
+
+/* ── Адаптив ── */
+@media (max-width:600px){
+  .door-arch-wrap{width:94vw;height:74vh;}.door{width:68vw;height:52vh;}
+  .hanging-vine{width:80px;}.hanging-vine.left{left:0;}.hanging-vine.right{right:0;}
+  .door-wreath{width:56px;height:56px;}
+}
+@media (max-width:480px){
+  .door-arch-wrap{width:94vw;height:72vh;}
+  .door{width:68vw;height:50vh;}
+  .viewer-nav{width:42px;height:42px;font-size:26px;}
+  .viewer-nav.prev{left:6px;}
+  .viewer-nav.next{right:6px;}
+  .viewer-close{width:38px;height:38px;font-size:20px;top:10px;right:10px;}
+  .ui-hint{font-size:20px;}
+  .tip{font-size:20px;padding:12px 22px;}
+  .mute-btn{width:38px;height:38px;top:10px;right:10px;}
+  .finale-photo-wrap{width:88vw;}
+  .door-names{font-size:clamp(38px,12vw,64px);}
+  .ui-names{font-size:clamp(26px,7.5vw,34px);}
+  .easter-inner{padding:36px 26px 28px;}
+}
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{animation-duration:.01ms !important;animation-iteration-count:1 !important;transition-duration:.15s !important;}
+}
+</style>
+</head>
+<body>
+
+<!-- Watchdog: подсказки, если 3D долго не грузится -->
+<script>
+(function(){
+  var startTs = Date.now();
+  setInterval(function(){
+    if (window.__threeStarted) return;
+    var loader = document.getElementById('loader');
+    if (!loader || loader.classList.contains('hide')) return;
+    var hint = document.getElementById('loaderHint');
+    if (!hint) return;
+    var el = (Date.now() - startTs) / 1000;
+    if (el > 4 && el <= 10) hint.textContent = 'Загружаем 3D-комнату…';
+    if (el > 10 && el <= 20) hint.textContent = 'Медленное соединение. Ещё немного…';
+    if (el > 20) hint.textContent = 'Проверьте интернет и обновите страницу.';
+  }, 800);
+})();
+</script>
+
+<div class="loader" id="loader" aria-hidden="true">
+  <div class="loader-inner">
+    <p class="loader-script">Максим &amp; Анастасия</p>
+    <div class="loader-hair"></div>
+    <p class="loader-names">Комната воспоминаний</p>
+    <p class="loader-date">10 октября 2025</p>
+    <p class="loader-hint" id="loaderHint">Сейчас дверь откроется…</p>
+  </div>
+</div>
+
+<div class="door-screen" id="doorScreen">
+  <div class="door-titles">
+    <p class="door-eyebrow">Комната воспоминаний</p>
+    <h1 class="door-names">Максим<em>&amp;</em>Анастасия</h1>
+    <p class="door-date">10 · 10 · 2025</p>
+  </div>
+  <div class="door-arch-wrap">
+    <div class="door-arch"></div>
+    <div class="door-wreath left"><svg viewBox="0 0 80 80"><circle cx="40" cy="40" r="26" stroke="#1f3d2a" stroke-width="2" fill="none" opacity=".9"/><g fill="#2f5a3e" opacity=".95"><ellipse cx="20" cy="30" rx="8" ry="3" transform="rotate(-40 20 30)"/><ellipse cx="26" cy="18" rx="8" ry="3" transform="rotate(-20 26 18)"/><ellipse cx="38" cy="14" rx="8" ry="3" transform="rotate(-5 38 14)"/><ellipse cx="52" cy="20" rx="8" ry="3" transform="rotate(25 52 20)"/><ellipse cx="60" cy="32" rx="8" ry="3" transform="rotate(50 60 32)"/><ellipse cx="60" cy="50" rx="8" ry="3" transform="rotate(130 60 50)"/><ellipse cx="52" cy="62" rx="8" ry="3" transform="rotate(160 52 62)"/><ellipse cx="38" cy="66" rx="8" ry="3" transform="rotate(180 38 66)"/><ellipse cx="24" cy="62" rx="8" ry="3" transform="rotate(200 24 62)"/><ellipse cx="18" cy="50" rx="8" ry="3" transform="rotate(230 18 50)"/></g><g fill="#fcecdf"><circle cx="40" cy="16" r="4"/><circle cx="60" cy="34" r="4"/><circle cx="56" cy="60" r="4"/><circle cx="20" cy="46" r="4"/></g><g fill="#c8a24a"><circle cx="40" cy="16" r="1.5"/><circle cx="60" cy="34" r="1.5"/><circle cx="56" cy="60" r="1.5"/><circle cx="20" cy="46" r="1.5"/></g></svg></div>
+    <div class="door-wreath right"><svg viewBox="0 0 80 80"><circle cx="40" cy="40" r="26" stroke="#1f3d2a" stroke-width="2" fill="none" opacity=".9"/><g fill="#2f5a3e" opacity=".95"><ellipse cx="20" cy="30" rx="8" ry="3" transform="rotate(-40 20 30)"/><ellipse cx="26" cy="18" rx="8" ry="3" transform="rotate(-20 26 18)"/><ellipse cx="38" cy="14" rx="8" ry="3" transform="rotate(-5 38 14)"/><ellipse cx="52" cy="20" rx="8" ry="3" transform="rotate(25 52 20)"/><ellipse cx="60" cy="32" rx="8" ry="3" transform="rotate(50 60 32)"/><ellipse cx="60" cy="50" rx="8" ry="3" transform="rotate(130 60 50)"/><ellipse cx="52" cy="62" rx="8" ry="3" transform="rotate(160 52 62)"/><ellipse cx="38" cy="66" rx="8" ry="3" transform="rotate(180 38 66)"/><ellipse cx="24" cy="62" rx="8" ry="3" transform="rotate(200 24 62)"/><ellipse cx="18" cy="50" rx="8" ry="3" transform="rotate(230 18 50)"/></g><g fill="#fcecdf"><circle cx="40" cy="16" r="4"/><circle cx="60" cy="34" r="4"/><circle cx="56" cy="60" r="4"/><circle cx="20" cy="46" r="4"/></g><g fill="#c8a24a"><circle cx="40" cy="16" r="1.5"/><circle cx="60" cy="34" r="1.5"/><circle cx="56" cy="60" r="1.5"/><circle cx="20" cy="46" r="1.5"/></g></svg></div>
+    <div class="hanging-vine left"><svg viewBox="0 0 200 900" preserveAspectRatio="xMidYMin slice"><path d="M100 0 Q 70 80 100 160 Q 130 240 100 320 Q 70 400 100 480 Q 130 560 100 640 Q 70 720 100 800 Q 130 880 100 900" stroke="#1f3d2a" stroke-width="2.2" fill="none" opacity=".95"/><path d="M120 0 Q 90 100 120 200 Q 150 300 120 400 Q 90 500 120 600 Q 150 700 120 800 Q 90 880 120 900" stroke="#2f5a3e" stroke-width="1.2" fill="none" opacity=".75"/><g fill="#2f5a3e" opacity=".95"><ellipse cx="78" cy="60" rx="16" ry="7" transform="rotate(-30 78 60)"/><ellipse cx="140" cy="130" rx="15" ry="6.5" transform="rotate(30 140 130)"/><ellipse cx="76" cy="200" rx="16" ry="7" transform="rotate(-32 76 200)"/><ellipse cx="142" cy="270" rx="15" ry="6.5" transform="rotate(32 142 270)"/><ellipse cx="78" cy="340" rx="16" ry="7" transform="rotate(-30 78 340)"/><ellipse cx="140" cy="410" rx="15" ry="6.5" transform="rotate(30 140 410)"/><ellipse cx="76" cy="480" rx="16" ry="7" transform="rotate(-32 76 480)"/><ellipse cx="142" cy="550" rx="15" ry="6.5" transform="rotate(32 142 550)"/></g><g transform="translate(100 130)"><circle cx="0" cy="-8" r="7" fill="#fcecdf"/><circle cx="8" cy="0" r="7" fill="#f8d8c8"/><circle cx="0" cy="8" r="7" fill="#fae0cc"/><circle cx="-8" cy="0" r="7" fill="#f8d8c8"/><circle cx="0" cy="0" r="3.5" fill="#c8a24a"/></g><g transform="translate(120 320)"><circle cx="0" cy="-7" r="6" fill="#fae0cc"/><circle cx="7" cy="0" r="6" fill="#f8d8c8"/><circle cx="0" cy="7" r="6" fill="#fcecdf"/><circle cx="-7" cy="0" r="6" fill="#f8d8c8"/><circle cx="0" cy="0" r="3" fill="#c8a24a"/></g></svg></div>
+    <div class="hanging-vine right"><svg viewBox="0 0 200 900" preserveAspectRatio="xMidYMin slice"><path d="M100 0 Q 130 80 100 160 Q 70 240 100 320 Q 130 400 100 480 Q 70 560 100 640 Q 130 720 100 800 Q 70 880 100 900" stroke="#1f3d2a" stroke-width="2.2" fill="none" opacity=".95"/><path d="M80 0 Q 110 100 80 200 Q 50 300 80 400 Q 110 500 80 600 Q 50 700 80 800 Q 110 880 80 900" stroke="#2f5a3e" stroke-width="1.2" fill="none" opacity=".75"/><g fill="#2f5a3e" opacity=".95"><ellipse cx="122" cy="60" rx="16" ry="7" transform="rotate(30 122 60)"/><ellipse cx="60" cy="130" rx="15" ry="6.5" transform="rotate(-30 60 130)"/><ellipse cx="124" cy="200" rx="16" ry="7" transform="rotate(32 124 200)"/><ellipse cx="58" cy="270" rx="15" ry="6.5" transform="rotate(-32 58 270)"/><ellipse cx="122" cy="340" rx="16" ry="7" transform="rotate(30 122 340)"/><ellipse cx="60" cy="410" rx="15" ry="6.5" transform="rotate(-30 60 410)"/><ellipse cx="124" cy="480" rx="16" ry="7" transform="rotate(32 124 480)"/><ellipse cx="58" cy="550" rx="15" ry="6.5" transform="rotate(-32 58 550)"/></g><g transform="translate(110 130)"><circle cx="0" cy="-8" r="7" fill="#fcecdf"/><circle cx="8" cy="0" r="7" fill="#f8d8c8"/><circle cx="0" cy="8" r="7" fill="#fae0cc"/><circle cx="-8" cy="0" r="7" fill="#f8d8c8"/><circle cx="0" cy="0" r="3.5" fill="#c8a24a"/></g><g transform="translate(90 320)"><circle cx="0" cy="-7" r="6" fill="#fae0cc"/><circle cx="7" cy="0" r="6" fill="#f8d8c8"/><circle cx="0" cy="7" r="6" fill="#fcecdf"/><circle cx="-7" cy="0" r="6" fill="#f8d8c8"/><circle cx="0" cy="0" r="3" fill="#c8a24a"/></g></svg></div>
+    <div class="door" id="door">
+      <div class="door-leaf left"><span class="door-handle"></span></div>
+      <div class="door-leaf right"><span class="door-handle"></span></div>
+      <div class="door-glow"></div>
+    </div>
+  </div>
+  <p class="door-hint"><span class="key">✦</span>Нажмите, чтобы войти<span class="key">✦</span></p>
+</div>
+
+<button class="mute-btn" id="muteBtn" aria-label="Звук" title="Звук свечей">
+  <svg class="sound-on" viewBox="0 0 24 24"><path d="M11 5 L6 9 H2 V15 H6 L11 19 Z"/><path d="M15.5 8.5 Q18 12 15.5 15.5"/><path d="M18 6 Q22 12 18 18"/></svg>
+  <svg class="sound-off" viewBox="0 0 24 24"><path d="M11 5 L6 9 H2 V15 H6 L11 19 Z"/><path d="M22 9 L16 15"/><path d="M16 9 L22 15"/></svg>
+</button>
+
+<header class="ui-top" id="uiTop">
+  <p class="ui-eyebrow">Комната воспоминаний</p>
+  <h1 class="ui-names" id="uiNames" title="Нажми и удерживай">Максим<em>&amp;</em>Анастасия</h1>
+  <p class="ui-date">10 · 10 · 2025</p>
+</header>
+
+<div class="tip" id="tip">
+  <span class="tip-cursor"></span>
+  Нажмите на любое фото
+</div>
+
+<div class="ui-bottom" id="uiBottom">
+  <p class="ui-hint"><span class="arr">‹</span>Оглядитесь вокруг<span class="arr">›</span></p>
+  <div class="ui-actions">
+    <button class="ui-btn" id="finishBtn" type="button">Завершить просмотр</button>
+  </div>
+  <p class="ui-counter" id="uiCounter"></p>
+</div>
+
+<div class="viewer" id="viewer" role="dialog" aria-modal="true" aria-label="Просмотр фотографии">
+  <button class="viewer-close" id="viewerClose" type="button" aria-label="Закрыть">×</button>
+  <button class="viewer-nav prev" id="viewerPrev" type="button" aria-label="Предыдущее">‹</button>
+  <button class="viewer-nav next" id="viewerNext" type="button" aria-label="Следующее">›</button>
+  <figure class="viewer-fig">
+    <img class="viewer-img" id="viewerImg" src="" alt="" style="display:none;"
+         onerror="this.style.display='none';document.getElementById('viewerPlaceholder').style.display='flex';">
+    <div class="viewer-placeholder" id="viewerPlaceholder" style="display:none;">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2">
+        <rect x="3" y="6" width="18" height="13" rx="1.5"/>
+        <circle cx="12" cy="12.5" r="3.5"/>
+        <path d="M9 6 L10 4 H14 L15 6"/>
+      </svg>
+      <div class="ph-title">Комната воспоминаний</div>
+      <div class="ph-hint">Проверьте имя файла в папке</div>
+    </div>
+    <figcaption class="viewer-caption">Комната воспоминаний</figcaption>
+  </figure>
+</div>
+
+<div class="finale" id="finale">
+  <div class="finale-dots" id="finaleDots"></div>
+  <div class="finale-inner" id="finaleInner"></div>
+  <p class="finale-hint" id="finaleHint">Нажмите, чтобы продолжить</p>
+</div>
+
+<div class="easter-egg" id="easterEgg">
+  <div class="easter-inner">
+    <div class="easter-ornament"><svg viewBox="0 0 200 20" fill="none" stroke="#c8a24a" stroke-width="1.2" stroke-linecap="round"><path d="M10 10 Q 40 2 60 10 Q 80 18 100 10 Q 120 2 140 10 Q 160 18 190 10"/><circle cx="100" cy="10" r="2.4" fill="#c8a24a" stroke="none"/></svg></div>
+    <p class="easter-script">Ты нашёл секрет</p>
+    <p class="easter-text">10.10.2025 — день, когда началось наше <em>«мы»</em>.<br>Спасибо, что смотришь так внимательно.</p>
+    <button class="btn" id="easterClose" type="button">Закрыть</button>
+  </div>
+</div>
+
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+    "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+  }
+}
+</script>
+
+<script type="module">
+import * as THREE from 'three';
+window.__threeStarted = true;
+
+let EffectComposer = null, RenderPass = null, UnrealBloomPass = null, RoomEnvironment = null;
+try {
+  ({ EffectComposer }  = await import('three/addons/postprocessing/EffectComposer.js'));
+  ({ RenderPass }      = await import('three/addons/postprocessing/RenderPass.js'));
+  ({ UnrealBloomPass } = await import('three/addons/postprocessing/UnrealBloomPass.js'));
+  ({ RoomEnvironment } = await import('three/addons/environments/RoomEnvironment.js'));
+} catch(e){
+  console.warn('Дополнения postprocessing не загружены:', e);
+}
+
+const IS_MOBILE = window.innerWidth < 700;
+
+const QUALITY = {
+  pointLights: IS_MOBILE ? 4 : 6,
+  antialias:   !IS_MOBILE,
+  pixelRatio:  Math.min(window.devicePixelRatio, IS_MOBILE ? 1.5 : 2),
+  bloom:       !IS_MOBILE,
+  envMap:      true
+};
+
+const COUPLE = { groom:'Максим', bride:'Анастасия', date:'10 · 10 · 2025' };
+const STORAGE_KEY = 'memory-room-opened-v3';
+
+/* ═══════════════════════════════════════════════════════════
+   36 ФОТО. Единый нейтральный знак — «Комната воспоминаний».
+   Файлы: photo1.jpg … photo36.jpg в одной папке с index.html
+   ═══════════════════════════════════════════════════════════ */
+const PHOTO_SIGN = 'Комната воспоминаний';
+const PHOTOS = [
+  'photo1.jpg','photo2.jpg','photo3.jpg','photo4.jpg','photo5.jpg','photo6.jpg',
+  'photo7.jpg','photo8.jpg','photo9.jpg','photo10.jpg','photo11.jpg','photo12.jpg',
+  'photo13.jpg','photo14.jpg','photo15.jpg','photo16.jpg','photo17.jpg','photo18.jpg',
+  'photo19.jpg','photo20.jpg','photo21.jpg','photo22.jpg','photo23.jpg','photo24.jpg',
+  'photo25.jpg','photo26.jpg','photo27.jpg','photo28.jpg','photo29.jpg','photo30.jpg',
+  'photo31.jpg','photo32.jpg','photo33.jpg','photo34.jpg','photo35.jpg','photo36.jpg'
+].map(src => ({ src }));
+
+/* Распределение по стенам:
+   MAIN_PHOTOS — 2 вертикальных для арок
+   VERTICAL_PHOTOS — 3 вертикальных на стены
+   HORIZONTAL_PHOTOS — 31 горизонтальных на стены */
+const MAIN_PHOTOS = [PHOTOS[0], PHOTOS[1]];
+const VERTICAL_PHOTOS = [PHOTOS[2], PHOTOS[3], PHOTOS[4]];
+const HORIZONTAL_PHOTOS = PHOTOS.slice(5);
+
+const els = {
+  loader: document.getElementById('loader'),
+  doorScreen: document.getElementById('doorScreen'),
+  counter: document.getElementById('uiCounter'),
+  viewer: document.getElementById('viewer'),
+  viewerImg: document.getElementById('viewerImg'),
+  viewerPlaceholder: document.getElementById('viewerPlaceholder'),
+  viewerClose: document.getElementById('viewerClose'),
+  viewerPrev: document.getElementById('viewerPrev'),
+  viewerNext: document.getElementById('viewerNext'),
+  finishBtn: document.getElementById('finishBtn'),
+  uiTop: document.getElementById('uiTop'),
+  uiBottom: document.getElementById('uiBottom'),
+  uiNames: document.getElementById('uiNames'),
+  muteBtn: document.getElementById('muteBtn'),
+  tip: document.getElementById('tip'),
+  finale: document.getElementById('finale'),
+  finaleInner: document.getElementById('finaleInner'),
+  finaleHint: document.getElementById('finaleHint'),
+  finaleDots: document.getElementById('finaleDots'),
+  easterEgg: document.getElementById('easterEgg'),
+  easterClose: document.getElementById('easterClose')
+};
+
+const ROOM = { W: 1600, H: 700, D: 1600, EYE: 165 };
+
+const renderer = new THREE.WebGLRenderer({ antialias: QUALITY.antialias, powerPreference: 'high-performance' });
+renderer.setPixelRatio(QUALITY.pixelRatio);
+renderer.setSize(window.innerWidth, window.innerHeight);
+renderer.outputColorSpace = THREE.SRGBColorSpace;
+renderer.toneMapping = THREE.ACESFilmicToneMapping;
+renderer.toneMappingExposure = 1.2;
+renderer.domElement.style.opacity = '0';
+renderer.domElement.style.transition = 'opacity 1s ease';
+document.body.appendChild(renderer.domElement);
+
+const scene = new THREE.Scene();
+scene.background = new THREE.Color(0xf2e8d6);
+scene.fog = new THREE.Fog(0xf2e8d6, 1400, 3200);
+
+const camera = new THREE.PerspectiveCamera(78, window.innerWidth / window.innerHeight, 1, 4000);
+camera.position.set(0, -ROOM.H / 2 + ROOM.EYE, 0);
+camera.rotation.order = 'YXZ';
+
+let composer = null;
+
+/* ── Текстуры ── */
+function makeFlowerTex(){
+  const S = 128; const c = document.createElement('canvas'); c.width = c.height = S;
+  const ctx = c.getContext('2d'); ctx.clearRect(0, 0, S, S);
+  for (let i = 0; i < 5; i++){
+    const ang = (i / 5) * Math.PI * 2 - Math.PI / 2;
+    ctx.save(); ctx.translate(S/2, S/2); ctx.rotate(ang);
+    const g = ctx.createRadialGradient(0, -24, 2, 0, -24, 28);
+    g.addColorStop(0, '#fdf2e9'); g.addColorStop(.55, '#fcecdf'); g.addColorStop(1, '#f8d8c8');
+    ctx.fillStyle = g; ctx.beginPath(); ctx.ellipse(0, -24, 16, 26, 0, 0, Math.PI * 2); ctx.fill();
+    ctx.strokeStyle = 'rgba(220,180,160,.35)'; ctx.lineWidth = 1; ctx.stroke();
+    ctx.restore();
+  }
+  ctx.fillStyle = '#c8a24a'; ctx.beginPath(); ctx.arc(S/2, S/2, 8, 0, Math.PI * 2); ctx.fill();
+  const tex = new THREE.CanvasTexture(c); tex.colorSpace = THREE.SRGBColorSpace; tex.generateMipmaps = false;
+  return tex;
+}
+function makeLeafTex(){
+  const S = 128; const c = document.createElement('canvas'); c.width = c.height = S;
+  const ctx = c.getContext('2d'); ctx.clearRect(0, 0, S, S);
+  ctx.translate(S/2, S/2);
+  const g = ctx.createRadialGradient(0, 0, 5, 0, 0, S/2);
+  g.addColorStop(0, '#3d6b4a'); g.addColorStop(.5, '#2a4d35'); g.addColorStop(1, '#162b1e');
+  ctx.fillStyle = g; ctx.beginPath(); ctx.ellipse(0, 0, S*0.42, S*0.22, 0, 0, Math.PI * 2); ctx.fill();
+  ctx.strokeStyle = 'rgba(20,45,30,.55)'; ctx.lineWidth = 1.5;
+  ctx.beginPath(); ctx.moveTo(-S*0.38, 0); ctx.lineTo(S*0.38, 0); ctx.stroke();
+  const tex = new THREE.CanvasTexture(c); tex.colorSpace = THREE.SRGBColorSpace; tex.generateMipmaps = false;
+  return tex;
+}
+function makeFlutesTex(){
+  const W = 128, H = 32; const c = document.createElement('canvas'); c.width = W; c.height = H;
+  const ctx = c.getContext('2d');
+  for (let x = 0; x < W; x++){
+    const v = Math.sin((x / W) * Math.PI * 16);
+    const val = Math.round(180 + (0.5 + v * 0.5) * 60);
+    ctx.fillStyle = `rgb(${val},${val},${val - 5})`; ctx.fillRect(x, 0, 1, H);
+  }
+  const tex = new THREE.CanvasTexture(c); tex.colorSpace = THREE.SRGBColorSpace;
+  tex.wrapS = THREE.RepeatWrapping; tex.wrapT = THREE.RepeatWrapping; tex.repeat.set(2, 1);
+  return tex;
+}
+function makeVelvetTex(r, g, b){
+  const W = 64, H = 64; const c = document.createElement('canvas'); c.width = W; c.height = H;
+  const ctx = c.getContext('2d'); const img = ctx.createImageData(W, H);
+  for (let i = 0; i < W * H; i++){
+    const x = i % W;
+    const stripe = Math.sin((x / W) * Math.PI * 16) * .5 + .5;
+    const shade = 0.92 + stripe * 0.08;
+    img.data[i*4] = Math.min(255, r * shade); img.data[i*4+1] = Math.min(255, g * shade); img.data[i*4+2] = Math.min(255, b * shade); img.data[i*4+3] = 255;
+  }
+  ctx.putImageData(img, 0, 0);
+  const tex = new THREE.CanvasTexture(c); tex.colorSpace = THREE.SRGBColorSpace;
+  tex.wrapS = THREE.RepeatWrapping; tex.wrapT = THREE.RepeatWrapping; return tex;
+}
+function makeBeamTex(){
+  const W = 64, H = 256; const c = document.createElement('canvas'); c.width = W; c.height = H;
+  const ctx = c.getContext('2d');
+  const g = ctx.createLinearGradient(0, 0, 0, H);
+  g.addColorStop(0, 'rgba(255,240,200,0.5)'); g.addColorStop(0.4, 'rgba(255,235,190,0.18)'); g.addColorStop(1, 'rgba(255,230,180,0)');
+  ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
+  const img = ctx.getImageData(0, 0, W, H);
+  for (let y = 0; y < H; y++){
+    for (let x = 0; x < W; x++){
+      const i = (y * W + x) * 4;
+      const dx = Math.abs(x - W/2) / (W/2);
+      const falloff = 1 - dx * dx;
+      img.data[i + 3] = Math.round(img.data[i + 3] * falloff);
+    }
+  }
+  ctx.putImageData(img, 0, 0);
+  const tex = new THREE.CanvasTexture(c); tex.colorSpace = THREE.SRGBColorSpace; return tex;
+}
+function makeMonogramGlowTex(){
+  const S = 256; const c = document.createElement('canvas'); c.width = c.height = S;
+  const ctx = c.getContext('2d'); ctx.clearRect(0, 0, S, S);
+  const g = ctx.createRadialGradient(S/2, S/2, 0, S/2, S/2, S/2);
+  g.addColorStop(0, 'rgba(255,230,180,0.9)'); g.addColorStop(0.45, 'rgba(255,230,180,0.35)'); g.addColorStop(0.75, 'rgba(255,230,180,0.1)'); g.addColorStop(1, 'rgba(255,230,180,0)');
+  ctx.fillStyle = g; ctx.fillRect(0, 0, S, S);
+  const tex = new THREE.CanvasTexture(c); tex.colorSpace = THREE.SRGBColorSpace; tex.generateMipmaps = false; return tex;
+}
+function makeShadowTex(){
+  const S = 128; const c = document.createElement('canvas'); c.width = c.height = S;
+  const ctx = c.getContext('2d');
+  const g = ctx.createRadialGradient(S/2, S/2, 0, S/2, S/2, S/2);
+  g.addColorStop(0, 'rgba(30,18,10,0.6)'); g.addColorStop(0.5, 'rgba(30,18,10,0.25)'); g.addColorStop(1, 'rgba(30,18,10,0)');
+  ctx.fillStyle = g; ctx.fillRect(0, 0, S, S);
+  const tex = new THREE.CanvasTexture(c); tex.colorSpace = THREE.SRGBColorSpace; tex.generateMipmaps = false; return tex;
+}
+
+const TEX = {
+  flower: makeFlowerTex(), leaf: makeLeafTex(), flutes: makeFlutesTex(),
+  velvetPeach: makeVelvetTex(250, 220, 200), velvetPeachLight: makeVelvetTex(252, 234, 220),
+  beam: makeBeamTex(), monogramGlow: makeMonogramGlowTex(), shadow: makeShadowTex()
+};
+
+function addContactShadow(x, z, radius){
+  const mat = new THREE.MeshBasicMaterial({ map: TEX.shadow, transparent: true, depthWrite: false, opacity: 0.85 });
+  const shadow = new THREE.Mesh(new THREE.PlaneGeometry(radius * 2, radius * 2), mat);
+  shadow.rotation.x = -Math.PI / 2;
+  shadow.position.set(x, -ROOM.H/2 + 1.2, z);
+  shadow.renderOrder = 1; scene.add(shadow);
+}
+
+/* ═══════════════════════════════════════════════════════════
+   Монограмма M&A с завитушками (шрифт Pinyon Script)
+   ═══════════════════════════════════════════════════════════ */
+function drawMonogramToCanvas(canvas){
+  const ink = '#4a2810';
+  const gold = '#c8a24a';
+  const W = canvas.width, H = canvas.height;
+  const ctx = canvas.getContext('2d');
+  ctx.clearRect(0, 0, W, H);
+
+  ctx.strokeStyle = gold; ctx.lineWidth = 1.6; ctx.lineCap = 'round';
+  ctx.beginPath();
+  ctx.moveTo(W/2 - 230, 60);
+  ctx.bezierCurveTo(W/2 - 130, 32, W/2 - 60, 84, W/2, 54);
+  ctx.bezierCurveTo(W/2 + 60, 84, W/2 + 130, 32, W/2 + 230, 60);
+  ctx.stroke();
+  ctx.fillStyle = gold;
+  ctx.beginPath(); ctx.arc(W/2, 54, 5, 0, Math.PI*2); ctx.fill();
+  ctx.beginPath(); ctx.arc(W/2, 54, 10, 0, Math.PI*2); ctx.stroke();
+
+  ctx.fillStyle = ink;
+  ctx.textAlign = 'center'; ctx.textBaseline = 'alphabetic';
+  ctx.font = 'normal 500 460px "Pinyon Script", "Great Vibes", cursive';
+  ctx.fillText('M', W/2 - 180, 400);
+
+  ctx.fillStyle = gold;
+  ctx.font = 'italic 500 130px "Cormorant Garamond", Georgia, serif';
+  ctx.textBaseline = 'middle';
+  ctx.fillText('&', W/2 + 12, 460);
+
+  ctx.fillStyle = ink;
+  ctx.textBaseline = 'alphabetic';
+  ctx.font = 'normal 500 460px "Pinyon Script", "Great Vibes", cursive';
+  ctx.fillText('A', W/2 + 180, 610);
+
+  ctx.strokeStyle = gold; ctx.lineWidth = 1.6;
+  ctx.beginPath();
+  ctx.moveTo(W/2 - 230, 720);
+  ctx.bezierCurveTo(W/2 - 130, 748, W/2 - 60, 692, W/2, 722);
+  ctx.bezierCurveTo(W/2 + 60, 692, W/2 + 130, 748, W/2 + 230, 720);
+  ctx.stroke();
+  ctx.fillStyle = gold;
+  ctx.beginPath(); ctx.arc(W/2, 722, 5, 0, Math.PI*2); ctx.fill();
+  ctx.beginPath(); ctx.arc(W/2, 722, 10, 0, Math.PI*2); ctx.stroke();
+
+  ctx.strokeStyle = 'rgba(200,162,74,.7)'; ctx.lineWidth = 1.4;
+  ctx.beginPath();
+  ctx.moveTo(W/2 - 330, 175);
+  ctx.bezierCurveTo(W/2 - 400, 140, W/2 - 420, 200, W/2 - 355, 215);
+  ctx.bezierCurveTo(W/2 - 340, 200, W/2 - 335, 190, W/2 - 330, 175);
+  ctx.stroke();
+  ctx.beginPath();
+  ctx.moveTo(W/2 + 330, 570);
+  ctx.bezierCurveTo(W/2 + 400, 605, W/2 + 420, 545, W/2 + 355, 530);
+  ctx.bezierCurveTo(W/2 + 340, 545, W/2 + 335, 555, W/2 + 330, 570);
+  ctx.stroke();
+
+  ctx.strokeStyle = 'rgba(200,162,74,.55)';
+  ctx.beginPath();
+  ctx.moveTo(W/2 - 260, 430);
+  ctx.bezierCurveTo(W/2 - 170, 450, W/2 - 100, 470, W/2 - 50, 485);
+  ctx.stroke();
+  ctx.beginPath();
+  ctx.moveTo(W/2 + 50, 500);
+  ctx.bezierCurveTo(W/2 + 100, 515, W/2 + 170, 535, W/2 + 260, 555);
+  ctx.stroke();
+
+  ctx.strokeStyle = 'rgba(200,162,74,.75)'; ctx.lineWidth = 1.5;
+  ctx.beginPath(); ctx.moveTo(W/2 - 180, 830); ctx.lineTo(W/2 + 180, 830); ctx.stroke();
+  ctx.fillStyle = gold;
+  ctx.beginPath(); ctx.moveTo(W/2 - 205, 830); ctx.lineTo(W/2 - 195, 824); ctx.lineTo(W/2 - 185, 830); ctx.lineTo(W/2 - 195, 836); ctx.closePath(); ctx.fill();
+  ctx.beginPath(); ctx.moveTo(W/2 + 185, 830); ctx.lineTo(W/2 + 195, 824); ctx.lineTo(W/2 + 205, 830); ctx.lineTo(W/2 + 195, 836); ctx.closePath(); ctx.fill();
+
+  ctx.fillStyle = ink;
+  ctx.textAlign = 'center';
+  ctx.font = 'italic 400 62px "Cormorant Garamond", serif';
+  ctx.fillText(COUPLE.date, W/2, 910);
+
+  ctx.font = '400 62px "Parisienne", cursive';
+  ctx.fillText('Комната воспоминаний', W/2, 1000);
+}
+function makeMonogramTex(){
+  const c = document.createElement('canvas'); c.width = 900; c.height = 1100;
+  drawMonogramToCanvas(c);
+  const tex = new THREE.CanvasTexture(c); tex.colorSpace = THREE.SRGBColorSpace;
+  tex.anisotropy = 8; tex.minFilter = THREE.LinearFilter; tex.magFilter = THREE.LinearFilter;
+  return tex;
+}
+
+/* ── Материалы ── */
+const MAT = {
+  wall: new THREE.MeshStandardMaterial({ color: 0xe8ddc8, roughness: .95 }),
+  wallSide: new THREE.MeshStandardMaterial({ color: 0xf4e9d2, roughness: .95 }),
+  floor: new THREE.MeshStandardMaterial({ color: 0x6b5a40, roughness: .55, metalness: .08 }),
+  ceil: new THREE.MeshStandardMaterial({ color: 0xffffff, roughness: 1, emissive: 0xe8e0d0, emissiveIntensity: 0.5 }),
+  niche: new THREE.MeshStandardMaterial({ color: 0xdccaa6, roughness: 1, side: THREE.DoubleSide }),
+  gold: new THREE.MeshStandardMaterial({ color: 0xc8a24a, roughness: .18, metalness: .95, emissive: 0xffc860, emissiveIntensity: .45 }),
+  goldGlow: new THREE.MeshStandardMaterial({ color: 0xd8b85a, roughness: .18, metalness: .95, emissive: 0xffd870, emissiveIntensity: .75 }),
+  column: new THREE.MeshStandardMaterial({ color: 0xfcf7ee, roughness: .75, map: TEX.flutes }),
+  frame: new THREE.MeshStandardMaterial({ color: 0xfcf7ee, roughness: .6, metalness: .05 }),
+  stemDark:  new THREE.MeshStandardMaterial({ color: 0x1f3d2a, roughness: .9 }),
+  stemLight: new THREE.MeshStandardMaterial({ color: 0x2f5a3e, roughness: .9 }),
+  candleBody: new THREE.MeshStandardMaterial({ color: 0xfaf0dd, roughness: .7, emissive: 0xd8b878, emissiveIntensity: .7 }),
+  candleHolder: new THREE.MeshStandardMaterial({ color: 0xa8801f, roughness: .3, metalness: .85, emissive: 0x4a3008, emissiveIntensity: .25 }),
+  flame: new THREE.MeshBasicMaterial({ color: 0xffb060 }),
+  flameGlow: new THREE.MeshBasicMaterial({ color: 0xffb060, transparent: true, opacity: 0.2, blending: THREE.AdditiveBlending, depthWrite: false }),
+  bulb: new THREE.MeshBasicMaterial({ color: 0xfff4dd }),
+  lampShade: new THREE.MeshStandardMaterial({ color: 0xffffff, roughness: .8, emissive: 0xffe0b0, emissiveIntensity: 0.9 }),
+  leafSprite: new THREE.MeshBasicMaterial({ map: TEX.leaf, transparent: true, depthWrite: false, alphaTest: .15, side: THREE.DoubleSide }),
+  flowerSprite: new THREE.MeshBasicMaterial({ map: TEX.flower, transparent: true, depthWrite: false, alphaTest: .15, side: THREE.DoubleSide }),
+  greenVelvet: new THREE.MeshStandardMaterial({ color: 0x1a3324, roughness: .88, metalness: .02 }),
+  peachVelvet: new THREE.MeshStandardMaterial({ color: 0xfadcc8, roughness: .85, metalness: .02, map: TEX.velvetPeach }),
+  peachDrape: new THREE.MeshStandardMaterial({ color: 0xf2c8b0, roughness: .82, metalness: .02, map: TEX.velvetPeachLight, side: THREE.DoubleSide }),
+  beam: new THREE.MeshBasicMaterial({ map: TEX.beam, transparent: true, depthWrite: false, blending: THREE.AdditiveBlending, side: THREE.DoubleSide, opacity: 0.28 })
+};
+
+/* ── Комната ── */
+function buildRoom(){
+  const { W, H, D } = ROOM;
+  const back = new THREE.Mesh(new THREE.PlaneGeometry(W, H), MAT.wall); back.position.set(0, 0, -D / 2); scene.add(back);
+  const front = new THREE.Mesh(new THREE.PlaneGeometry(W, H), MAT.wallSide); front.position.set(0, 0, D / 2); front.rotation.y = Math.PI; scene.add(front);
+  const left = new THREE.Mesh(new THREE.PlaneGeometry(D, H), MAT.wallSide); left.position.set(-W / 2, 0, 0); left.rotation.y = Math.PI / 2; scene.add(left);
+  const right = new THREE.Mesh(new THREE.PlaneGeometry(D, H), MAT.wallSide); right.position.set(W / 2, 0, 0); right.rotation.y = -Math.PI / 2; scene.add(right);
+  const floor = new THREE.Mesh(new THREE.PlaneGeometry(W, D), MAT.floor); floor.position.set(0, -H / 2, 0); floor.rotation.x = -Math.PI / 2; scene.add(floor);
+
+  const lineMat = new THREE.LineBasicMaterial({ color: 0x5a4a30, transparent: true, opacity: .35 });
+  for (let i = -W/2; i <= W/2; i += 130){
+    scene.add(new THREE.Line(new THREE.BufferGeometry().setFromPoints([
+      new THREE.Vector3(i, -H/2 + 0.5, -D/2), new THREE.Vector3(i, -H/2 + 0.5, D/2)
+    ]), lineMat));
+  }
+  for (let i = -D/2; i <= D/2; i += 130){
+    scene.add(new THREE.Line(new THREE.BufferGeometry().setFromPoints([
+      new THREE.Vector3(-W/2, -H/2 + 0.5, i), new THREE.Vector3(W/2, -H/2 + 0.5, i)
+    ]), lineMat));
+  }
+
+  const ceil = new THREE.Mesh(new THREE.PlaneGeometry(W, D), MAT.ceil);
+  ceil.position.set(0, H / 2, 0); ceil.rotation.x = Math.PI / 2; scene.add(ceil);
+
+  const y = -H / 2 + 4, t = 4;
+  [[new THREE.BoxGeometry(W, t, t), 0, y, -D / 2 + 3],
+   [new THREE.BoxGeometry(W, t, t), 0, y, D / 2 - 3],
+   [new THREE.BoxGeometry(t, t, D), -W / 2 + 3, y, 0],
+   [new THREE.BoxGeometry(t, t, D), W / 2 - 3, y, 0]].forEach(([g, x, yy, z]) => {
+    const m = new THREE.Mesh(g, MAT.gold); m.position.set(x, yy, z); scene.add(m);
+  });
+
+  const ym = H / 2 - 14, tm = 6;
+  [[new THREE.BoxGeometry(W, tm, tm), 0, ym, -D / 2 + 5],
+   [new THREE.BoxGeometry(W, tm, tm), 0, ym, D / 2 - 5],
+   [new THREE.BoxGeometry(tm, tm, D), -W / 2 + 5, ym, 0],
+   [new THREE.BoxGeometry(tm, tm, D), W / 2 - 5, ym, 0]].forEach(([g, x, yy, z]) => {
+    const m = new THREE.Mesh(g, MAT.gold); m.position.set(x, yy, z); scene.add(m);
+  });
+}
+
+function buildWallPanels(){
+  const { W, H, D } = ROOM;
+  const panelW = 90, panelH = H - 100; const yCenter = 10;
+  [-480, -240, 0, 240, 480].forEach(z => {
+    const p1 = new THREE.Mesh(new THREE.BoxGeometry(6, panelH, panelW), MAT.greenVelvet); p1.position.set(-W/2 + 4, yCenter, z); scene.add(p1);
+    const p2 = new THREE.Mesh(new THREE.BoxGeometry(6, panelH, panelW), MAT.greenVelvet); p2.position.set(W/2 - 4, yCenter, z); scene.add(p2);
+    [yCenter + panelH/2 - 4, yCenter - panelH/2 + 4].forEach(y => {
+      const cap1 = new THREE.Mesh(new THREE.BoxGeometry(8, 3, panelW + 6), MAT.gold); cap1.position.set(-W/2 + 4, y, z); scene.add(cap1);
+      const cap2 = new THREE.Mesh(new THREE.BoxGeometry(8, 3, panelW + 6), MAT.gold); cap2.position.set(W/2 - 4, y, z); scene.add(cap2);
+    });
+  });
+  [-720, -180, 180, 720].forEach(x => {
+    const p = new THREE.Mesh(new THREE.BoxGeometry(panelW, panelH, 6), MAT.greenVelvet); p.position.set(x, yCenter, -D/2 + 4); scene.add(p);
+    [yCenter + panelH/2 - 4, yCenter - panelH/2 + 4].forEach(y => {
+      const cap = new THREE.Mesh(new THREE.BoxGeometry(panelW + 6, 3, 8), MAT.gold); cap.position.set(x, y, -D/2 + 4); scene.add(cap);
+    });
+  });
+}
+
+function buildDrapery(){
+  const { H, D } = ROOM;
+  [{ x: -605, baseW: 55 }, { x: -195, baseW: 35 }, { x: 195, baseW: 35 }, { x: 605, baseW: 55 }].forEach(({ x, baseW }) => {
+    for (let i = 0; i < 7; i++){
+      const t = i / 6; const offsetX = (t - 0.5) * baseW;
+      const lenVariation = 0.88 + Math.sin(i * 1.7) * 0.06 + Math.random() * 0.04;
+      const h = (H - 40) * lenVariation;
+      const depth = 4 + Math.abs(t - 0.5) * -4 + Math.sin(i * 0.9) * 1.5 + i * 0.5;
+      const drape = new THREE.Mesh(new THREE.PlaneGeometry(baseW / 7 + 1, h), MAT.peachDrape);
+      drape.position.set(x + offsetX, (H - 40) / 2 - h / 2 - 4, -D/2 + 8 + depth); scene.add(drape);
+    }
+    const rod = new THREE.Mesh(new THREE.CylinderGeometry(3, 3, baseW + 24, 12), MAT.gold);
+    rod.rotation.z = Math.PI / 2; rod.position.set(x, H/2 - 20, -D/2 + 14); scene.add(rod);
+    [-baseW / 2 - 12, baseW / 2 + 12].forEach(ox => {
+      const ball = new THREE.Mesh(new THREE.SphereGeometry(5, 12, 12), MAT.goldGlow);
+      ball.position.set(x + ox, H/2 - 20, -D/2 + 14); scene.add(ball);
+    });
+  });
+  [-660, -140, 140, 660].forEach(x => {
+    for (let i = 0; i < 4; i++){
+      const offsetX = (i - 1.5) * 14;
+      const h = (H - 60) * (0.92 + Math.sin(i * 1.3) * 0.05);
+      const p = new THREE.Mesh(new THREE.PlaneGeometry(16, h), MAT.peachDrape);
+      p.position.set(x + offsetX, (H - 60) / 2 - h / 2, -D/2 + 10 + i * 0.5); scene.add(p);
+    }
+  });
+}
+
+function buildRunner(){
+  const { D, H } = ROOM;
+  const runner = new THREE.Mesh(new THREE.PlaneGeometry(220, D - 100), MAT.peachVelvet);
+  runner.rotation.x = -Math.PI / 2; runner.position.set(0, -H/2 + 1, 0); scene.add(runner);
+  const darkEdgeMat = new THREE.MeshStandardMaterial({ color: 0x3a2818, roughness: .9 });
+  [-112, 112].forEach(x => { const dark = new THREE.Mesh(new THREE.BoxGeometry(2.5, 1, D - 100), darkEdgeMat); dark.position.set(x, -H/2 + 1.7, 0); scene.add(dark); });
+  [-110, 110].forEach(x => { const e = new THREE.Mesh(new THREE.BoxGeometry(3, 1, D - 100), MAT.gold); e.position.set(x, -H/2 + 1.5, 0); scene.add(e); });
+  for (let i = -7; i <= 7; i++){
+    const z = i * 90;
+    const diamond = new THREE.Mesh(new THREE.PlaneGeometry(24, 24), MAT.gold);
+    diamond.rotation.x = -Math.PI / 2; diamond.rotation.z = Math.PI / 4;
+    diamond.position.set(0, -H/2 + 1.3, z); scene.add(diamond);
+    [-55, 55].forEach(x => {
+      const small = new THREE.Mesh(new THREE.PlaneGeometry(12, 12), MAT.gold);
+      small.rotation.x = -Math.PI / 2; small.rotation.z = Math.PI / 4;
+      small.position.set(x, -H/2 + 1.3, z); scene.add(small);
+    });
+  }
+}
+
+function buildColumns(){
+  const { W, H, D } = ROOM;
+  const r = 26, h = H - 60;
+  [[-W/2 + 160, -D/2 + 160], [W/2 - 160, -D/2 + 160], [-W/2 + 160, D/2 - 160], [W/2 - 160, D/2 - 160]].forEach(([x, z]) => {
+    addContactShadow(x, z, 45);
+    const body = new THREE.Mesh(new THREE.CylinderGeometry(r, r * 1.05, h, 32), MAT.column); body.position.set(x, -H/2 + h/2 + 20, z); scene.add(body);
+    const cap1 = new THREE.Mesh(new THREE.CylinderGeometry(r * 1.15, r * 1.05, 6, 32), MAT.gold); cap1.position.set(x, -H/2 + h + 18, z); scene.add(cap1);
+    const cap2 = new THREE.Mesh(new THREE.CylinderGeometry(r * 1.45, r * 1.15, 12, 32), MAT.goldGlow); cap2.position.set(x, -H/2 + h + 27, z); scene.add(cap2);
+    const capTop = new THREE.Mesh(new THREE.BoxGeometry(r * 3.4, 6, r * 3.4), MAT.gold); capTop.position.set(x, -H/2 + h + 36, z); scene.add(capTop);
+    const base1 = new THREE.Mesh(new THREE.BoxGeometry(r * 3, 6, r * 3), MAT.gold); base1.position.set(x, -H/2 + 20, z); scene.add(base1);
+    const base2 = new THREE.Mesh(new THREE.CylinderGeometry(r * 1.5, r * 1.35, 12, 32), MAT.goldGlow); base2.position.set(x, -H/2 + 29, z); scene.add(base2);
+  });
+}
+
+function makeArchShape(W, H, T){
+  const R = W / 2; const shape = new THREE.Shape();
+  shape.moveTo(-W/2, 0); shape.lineTo(-W/2, H - R); shape.absarc(0, H - R, R, Math.PI, 0, true); shape.lineTo(W/2, 0); shape.lineTo(-W/2, 0);
+  const hole = new THREE.Path();
+  hole.moveTo(-W/2 + T, 0); hole.lineTo(-W/2 + T, H - R); hole.absarc(0, H - R, R - T, Math.PI, 0, true); hole.lineTo(W/2 - T, 0); hole.lineTo(-W/2 + T, 0);
+  shape.holes.push(hole); return shape;
+}
+function makeInnerArchShape(W, H, T){
+  const R = W / 2; const shape = new THREE.Shape();
+  shape.moveTo(-W/2 + T, 0); shape.lineTo(-W/2 + T, H - R); shape.absarc(0, H - R, R - T, Math.PI, 0, true); shape.lineTo(W/2 - T, 0); shape.lineTo(-W/2 + T, 0);
+  return shape;
+}
+
+let ARCS = [];
+function buildArches(){
+  const { H, D } = ROOM;
+  const archW = 420, archH = 600, archT = 22; const baseY = -H / 2 + 4;
+  const frameGeo = new THREE.ExtrudeGeometry(makeArchShape(archW, archH, archT), { depth: 22, bevelEnabled: false });
+  const nicheGeo = new THREE.ShapeGeometry(makeInnerArchShape(archW, archH, archT));
+  const edgeGeo = new THREE.ExtrudeGeometry(makeArchShape(archW - 6, archH - 6, archT - 10), { depth: 4, bevelEnabled: false });
+  const glowGeo = new THREE.ExtrudeGeometry(makeArchShape(archW + 10, archH + 10, archT + 3), { depth: 14, bevelEnabled: false });
+  const arcXs = [-400, 400];
+  arcXs.forEach(x => {
+    const niche = new THREE.Mesh(nicheGeo, MAT.niche); niche.position.set(x, baseY, -D/2 + 3); scene.add(niche);
+    const edge = new THREE.Mesh(edgeGeo, MAT.gold); edge.position.set(x, baseY + 3, -D/2 + 2); scene.add(edge);
+    const frame = new THREE.Mesh(frameGeo, MAT.gold); frame.position.set(x, baseY, -D/2 + 6); scene.add(frame);
+    const glow = new THREE.Mesh(glowGeo, MAT.goldGlow); glow.position.set(x, baseY - 4, -D/2 + 2); scene.add(glow);
+  });
+  ARCS = arcXs.map(x => ({ x, y: baseY + archH * 0.5, z: -D/2 + 28, w: 210, h: 250 }));
+}
+
+function buildMonogram(){
+  const { H, D } = ROOM;
+  const glowMat = new THREE.MeshBasicMaterial({ map: TEX.monogramGlow, transparent: true, opacity: 0.18, toneMapped: false, depthWrite: false, blending: THREE.AdditiveBlending });
+  const glowMesh = new THREE.Mesh(new THREE.PlaneGeometry(360, 360), glowMat); glowMesh.position.set(0, -H/2 + 340, -D/2 + 65); scene.add(glowMesh);
+  const tex = makeMonogramTex(); const w = 340, h = w * (1100 / 900);
+  const mat = new THREE.MeshBasicMaterial({ map: tex, transparent: true, toneMapped: false });
+  const mesh = new THREE.Mesh(new THREE.PlaneGeometry(w, h), mat);
+  mesh.position.set(0, -H/2 + 340, -D/2 + 70); scene.add(mesh);
+}
+
+/* ── Светильники ── */
+const realLights = []; let beamMeshes = [];
+
+function buildLamps(){
+  const { W, H, D } = ROOM; const y = H / 2 - 6;
+  const bigs = [
+    {x:0, z:0, r:130, big:true, light:true, central:true},
+    {x:-W/3, z:-D/3, r:70, light:true}, {x:W/3, z:-D/3, r:70, light:true},
+    {x:-W/3, z:D/3, r:70}, {x:W/3, z:D/3, r:70},
+    {x:-W/2+220, z:0, r:55}, {x:W/2-220, z:0, r:55},
+    {x:0, z:-D/2+220, r:55}, {x:0, z:D/2-220, r:55},
+    {x:-W/2+220, z:-D/2+220, r:45}, {x:W/2-220, z:-D/2+220, r:45},
+    {x:-W/2+220, z:D/2-220, r:45}, {x:W/2-220, z:D/2-220, r:45}
+  ];
+  let lightBudget = Math.max(0, QUALITY.pointLights - 2);
+  bigs.forEach(l => {
+    const useLight = l.light && lightBudget > 0;
+    addLamp(l.x, y, l.z, l.r, l.big, useLight, l.central);
+    if (useLight) lightBudget--;
+  });
+  const ring = new THREE.Mesh(new THREE.TorusGeometry(160, 3, 8, 64), MAT.gold); ring.rotation.x = Math.PI / 2; ring.position.set(0, y - 3, 0); scene.add(ring);
+  for (let i = 0; i < 8; i++){
+    const ang = (i / 8) * Math.PI * 2;
+    const dot = new THREE.Mesh(new THREE.SphereGeometry(5, 10, 10), MAT.goldGlow);
+    dot.position.set(Math.cos(ang) * 138, y - 2, Math.sin(ang) * 138); scene.add(dot);
+  }
+}
+function addLamp(x, y, z, radius, isChandelier, withLight, isCentral){
+  const disc = new THREE.Mesh(new THREE.CylinderGeometry(radius, radius * 0.96, 4, 24), MAT.lampShade); disc.position.set(x, y, z); scene.add(disc);
+  const rim = new THREE.Mesh(new THREE.TorusGeometry(radius, 2, 8, 24), MAT.gold); rim.rotation.x = Math.PI / 2; rim.position.set(x, y - 2, z); scene.add(rim);
+  const bulb = new THREE.Mesh(new THREE.SphereGeometry(radius * 0.22, 10, 10), MAT.bulb); bulb.position.set(x, y - 6, z); scene.add(bulb);
+  if (withLight){
+    let intensity; if (isCentral) intensity = 0.65; else if (isChandelier) intensity = 0.85; else intensity = 0.55;
+    const dist = isCentral ? 0 : 550;
+    const l = new THREE.PointLight(0xffe4b0, intensity, dist, 1.6); l.position.set(x, y - 20, z); scene.add(l);
+    realLights.push({ light: l, base: intensity, phase: Math.random() * Math.PI * 2 });
+    if (radius >= 70 && radius < 120 && beamMeshes.length < 4){
+      const beamHeight = ROOM.H * 0.9;
+      const beamGeo = new THREE.PlaneGeometry(radius * 2.4, beamHeight);
+      const beam = new THREE.Mesh(beamGeo, MAT.beam.clone()); beam.position.set(x, y - beamHeight / 2, z); beam.renderOrder = 2;
+      const beam2 = new THREE.Mesh(beamGeo, MAT.beam.clone()); beam2.position.set(x, y - beamHeight / 2, z); beam2.rotation.y = Math.PI / 2; beam2.renderOrder = 2;
+      scene.add(beam); scene.add(beam2); beamMeshes.push(beam, beam2);
+    }
+  }
+}
+
+/* ── Лианы ── */
+const vineFlowers = []; const vineBulbs = [];
+
+function makeVine(x0, yTop, z0, length, opts = {}){
+  const N = 40; const sway = opts.sway || 10; const turns = opts.turns || 1.5;
+  const points = [];
+  for (let i = 0; i <= N; i++){
+    const t = i / N; const ang = t * Math.PI * 2 * turns; const taper = 1 - t * 0.3;
+    points.push(new THREE.Vector3(x0 + Math.cos(ang) * sway * taper, yTop - length * t, z0 + Math.sin(ang) * sway * taper));
+  }
+  const curve = new THREE.CatmullRomCurve3(points);
+  scene.add(new THREE.Mesh(new THREE.TubeGeometry(curve, 60, 0.9, 6, false), MAT.stemDark));
+  const points2 = points.map((p, i) => {
+    const t = i / N; const ang = t * Math.PI * 2 * turns + Math.PI * 0.7;
+    return new THREE.Vector3(x0 + Math.cos(ang) * sway * 0.7 + 3, p.y, z0 + Math.sin(ang) * sway * 0.7 + 3);
+  });
+  const curve2 = new THREE.CatmullRomCurve3(points2);
+  scene.add(new THREE.Mesh(new THREE.TubeGeometry(curve2, 40, 0.6, 5, false), MAT.stemLight));
+
+  const leafCount = IS_MOBILE ? 12 : 22;
+  for (let i = 0; i < leafCount; i++){
+    const t = (i + 0.5) / leafCount; const p = curve.getPointAt(Math.min(.98, t));
+    const leaf = new THREE.Mesh(new THREE.PlaneGeometry(20, 12), MAT.leafSprite);
+    leaf.position.set(p.x + (Math.random() - .5) * 9, p.y + (Math.random() - .5) * 7, p.z + (Math.random() - .5) * 9);
+    leaf.rotation.set((Math.random() - .5) * 1.4, Math.random() * Math.PI * 2, (Math.random() - .5) * 0.8);
+    scene.add(leaf);
+  }
+  const flowerCount = IS_MOBILE ? 4 : 8;
+  for (let i = 0; i < flowerCount; i++){
+    const t = .1 + (i / flowerCount) * .82 + (Math.random() - .5) * .06; const p = curve.getPointAt(Math.min(.98, t));
+    const f = new THREE.Mesh(new THREE.PlaneGeometry(24, 24), MAT.flowerSprite);
+    f.position.set(p.x + (Math.random() - .5) * 11, p.y + (Math.random() - .5) * 9, p.z + (Math.random() - .5) * 11);
+    f.rotation.y = Math.random() * Math.PI * 2; scene.add(f);
+    vineFlowers.push({ mesh: f, phase: Math.random() * Math.PI * 2 });
+  }
+  const bulbCount = IS_MOBILE ? 4 : 10;
+  for (let i = 0; i < bulbCount; i++){
+    const t = (i + 0.5) / bulbCount; const p = curve.getPointAt(Math.min(.98, t));
+    const b = new THREE.Mesh(new THREE.SphereGeometry(1.4, 8, 8), MAT.bulb);
+    b.position.set(p.x + (Math.random() - .5) * 6, p.y + (Math.random() - .5) * 6, p.z + (Math.random() - .5) * 6);
+    scene.add(b);
+    vineBulbs.push({ mesh: b, phase: Math.random() * Math.PI * 2 });
+  }
+}
+function buildHangingVines(){
+  const { W, H, D } = ROOM; const topY = H / 2 - 3; const step = IS_MOBILE ? 2 : 1;
+  const backVines = [];
+  [-750, -450, 0, 450, 750].forEach(x => { const len = (x === 0) ? 140 : (300 + Math.random() * 150); backVines.push({ x, z: -D/2 + 80, len }); });
+  [-400, 400].forEach(x => { backVines.push({ x, z: -D/2 + 90, len: 200 }); });
+  backVines.forEach((v, i) => { if (i % step !== 0) return; makeVine(v.x, topY, v.z, v.len); });
+
+  const sidePairs = [];
+  [-700, -500, -300, -100, 100, 300, 500, 700].forEach(z => {
+    const len = 400 + Math.random() * 180;
+    sidePairs.push([{ x: -W/2 + 80, z, len }, { x: W/2 - 80, z, len }]);
+  });
+  sidePairs.forEach((pair, i) => { if (i % step !== 0) return; pair.forEach(v => makeVine(v.x, topY, v.z, v.len)); });
+
+  const frontVines = [];
+  [-700, -400, -100, 100, 400, 700].forEach(x => { frontVines.push({ x, z: D/2 - 80, len: 360 + Math.random() * 150 }); });
+  frontVines.forEach((v, i) => { if (i % step !== 0) return; makeVine(v.x, topY, v.z, v.len); });
+
+  const cornerVines = [{x:-250, z:-250}, {x:250, z:-250}, {x:-250, z:250}, {x:250, z:250}];
+  cornerVines.forEach((v, i) => { if (i % step !== 0) return; makeVine(v.x, topY, v.z, 300, { sway: 12, turns: 1.6 }); });
+}
+
+/* ── Свечи ── */
+function buildCandles(){
+  const { W, H, D } = ROOM;
+  const allClusters = [
+    [-W/2 + 260, -D/2 + 260], [W/2 - 260, -D/2 + 260], [-W/2 + 260, D/2 - 260], [W/2 - 260, D/2 - 260],
+    [-W/2 + 220, 0], [W/2 - 220, 0], [-300, -D/2 + 300], [300, -D/2 + 300], [-300, D/2 - 300], [300, D/2 - 300],
+    [0, -D/2 + 180], [0, D/2 - 180], [-160, -400], [160, -400], [-160, -200], [160, -200],
+    [-160, 0], [160, 0], [-160, 200], [160, 200], [-160, 400], [160, 400]
+  ];
+  const clusters = IS_MOBILE ? allClusters.filter((_, i) => i % 2 === 0) : allClusters;
+  const heights = [15, 28, 42];
+  clusters.forEach(([cx, cz]) => {
+    addContactShadow(cx, cz, 28);
+    [[-12, 0], [12, 0], [0, 12]].forEach(([ox, oz], i) => {
+      const h = heights[i]; const x = cx + ox, z = cz + oz;
+      const holder = new THREE.Mesh(new THREE.CylinderGeometry(7, 10, 5, 12), MAT.candleHolder); holder.position.set(x, -H/2 + 3, z); scene.add(holder);
+      const body = new THREE.Mesh(new THREE.CylinderGeometry(3.2, 3.8, h, 10), MAT.candleBody); body.position.set(x, -H/2 + 5 + h/2, z); scene.add(body);
+      const flame = new THREE.Mesh(new THREE.ConeGeometry(4.5, 14, 8), MAT.flame); flame.position.set(x, -H/2 + 5 + h + 6, z); scene.add(flame);
+      const glow = new THREE.Mesh(new THREE.SphereGeometry(12, 8, 8), MAT.flameGlow); glow.position.set(x, -H/2 + 5 + h + 6, z); scene.add(glow);
+    });
+  });
+}
+
+function buildFloorDecor(){
+  const { W, H, D } = ROOM;
+  [[-W/2 + 200, -D/2 + 200], [W/2 - 200, -D/2 + 200], [-W/2 + 200, D/2 - 200], [W/2 - 200, D/2 - 200], [-200, -D/2 + 120], [200, -D/2 + 120]].forEach(([x, z]) => {
+    addContactShadow(x, z, 32);
+    const vase = new THREE.Mesh(new THREE.CylinderGeometry(14, 18, 34, 16), MAT.gold); vase.position.set(x, -H/2 + 17, z); scene.add(vase);
+    const ring = new THREE.Mesh(new THREE.TorusGeometry(15, 2.5, 8, 20), MAT.goldGlow); ring.rotation.x = Math.PI / 2; ring.position.set(x, -H/2 + 34, z); scene.add(ring);
+    for (let i = 0; i < 22; i++){
+      const f = new THREE.Mesh(new THREE.PlaneGeometry(26, 26), MAT.flowerSprite);
+      const ang = (i / 22) * Math.PI * 2; const r = 4 + Math.random() * 14;
+      f.position.set(x + Math.cos(ang) * r, -H/2 + 40 + Math.random() * 24, z + Math.sin(ang) * r);
+      f.rotation.set((Math.random() - .5) * 1, Math.random() * Math.PI * 2, (Math.random() - .5) * 0.7);
+      scene.add(f); vineFlowers.push({ mesh: f, phase: Math.random() * Math.PI * 2 });
+    }
+    for (let i = 0; i < 12; i++){
+      const leaf = new THREE.Mesh(new THREE.PlaneGeometry(22, 12), MAT.leafSprite);
+      const ang = (i / 12) * Math.PI * 2 + Math.random(); const r = 8 + Math.random() * 10;
+      leaf.position.set(x + Math.cos(ang) * r, -H/2 + 30 + Math.random() * 14, z + Math.sin(ang) * r);
+      leaf.rotation.set((Math.random() - .5) * 1.2, Math.random() * Math.PI * 2, (Math.random() - .5) * 0.8);
+      scene.add(leaf);
+    }
+  });
+}
+
+/* ── Основное освещение ── */
+function buildLights(){
+  const { W, H, D } = ROOM;
+  scene.add(new THREE.AmbientLight(0xf5e6d0, 0.7));
+  const key = new THREE.DirectionalLight(0xffe4c0, 0.75); key.position.set(300, H, 400); scene.add(key);
+  const rim = new THREE.DirectionalLight(0xc8d8e8, 0.35); rim.position.set(-400, H/2, -600); scene.add(rim);
+  const fill = new THREE.DirectionalLight(0xffd8a8, 0.3); fill.position.set(-300, -H/2, 200); scene.add(fill);
+
+  const center = new THREE.PointLight(0xffe4b0, 0.5, 0, 1.6); center.position.set(0, H/2 - 80, 0); scene.add(center);
+  realLights.push({ light: center, base: 0.5, phase: Math.random() * Math.PI * 2 });
+
+  [-400, 400].forEach(x => {
+    const l = new THREE.PointLight(0xffd090, 0.6, 500, 2); l.position.set(x, 0, -D/2 + 200); scene.add(l);
+    realLights.push({ light: l, base: 0.6, phase: Math.random() * Math.PI * 2 });
+  });
+  const archLight = new THREE.PointLight(0xffd090, 0.7, 600, 2); archLight.position.set(0, -H/2 + 300, -D/2 + 200); scene.add(archLight);
+  realLights.push({ light: archLight, base: 0.7, phase: Math.random() * Math.PI * 2 });
+
+  [{ x: -W/2 + 260, z: -D/2 + 260 }, { x: W/2 - 260, z: -D/2 + 260 }, { x: -W/2 + 260, z: D/2 - 260 }, { x: W/2 - 260, z: D/2 - 260 }].forEach(p => {
+    const l = new THREE.PointLight(0xffc880, 0.35, 300, 1.8); l.position.set(p.x, -H/2 + 40, p.z); scene.add(l);
+    realLights.push({ light: l, base: 0.35, phase: Math.random() * Math.PI * 2 });
+  });
+}
+
+/* ═══════════════════════════════════════════════════════════
+   Раскладка фото на стенах
+   Левая: 11 (1 вертикальное + 10 горизонтальных)
+   Правая: 11 (1 вертикальное + 10 горизонтальных)
+   Передняя: 12 (1 вертикальное + 11 горизонтальных)
+   + 2 вертикальных в арках = 36
+   ═══════════════════════════════════════════════════════════ */
+const SIDE_SLOTS_LEFT = [
+  { y:  200, z: -525, w: 290, h: 140 },
+  { y:   20, z: -525, w: 290, h: 140 },
+  { y: -160, z: -525, w: 290, h: 140 },
+  { y:   70, z: -175, w: 140, h: 250, vertical: true },
+  { y: -160, z: -175, w: 290, h: 140 },
+  { y:  200, z:  175, w: 290, h: 140 },
+  { y:   20, z:  175, w: 290, h: 140 },
+  { y: -160, z:  175, w: 290, h: 140 },
+  { y:  110, z:  525, w: 290, h: 140 },
+  { y:  -70, z:  525, w: 290, h: 140 },
+  { y: -250, z:  525, w: 290, h: 140 }
+];
+const SIDE_SLOTS_RIGHT = SIDE_SLOTS_LEFT.map(s => ({ ...s }));
+const SIDE_SLOTS_FRONT = [
+  { y:  200, z: -525, w: 290, h: 140 },
+  { y:   20, z: -525, w: 290, h: 140 },
+  { y: -160, z: -525, w: 290, h: 140 },
+  { y:   70, z: -175, w: 140, h: 250, vertical: true },
+  { y: -160, z: -175, w: 290, h: 140 },
+  { y:  200, z:  175, w: 290, h: 140 },
+  { y:   20, z:  175, w: 290, h: 140 },
+  { y: -160, z:  175, w: 290, h: 140 },
+  { y:  220, z:  525, w: 290, h: 140 },
+  { y:   60, z:  525, w: 290, h: 140 },
+  { y: -100, z:  525, w: 290, h: 140 },
+  { y: -260, z:  525, w: 290, h: 140 }
+];
+
+const photoMeshes = [];
+const texLoader = new THREE.TextureLoader();
+texLoader.setCrossOrigin('anonymous');
+
+const openedSet = new Set();
+try {
+  const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+  if (Array.isArray(saved)) saved.forEach(i => openedSet.add(i));
+} catch(_){}
+
+/* Заглушка фото — без времени, только нейтральный знак */
+function makePhotoPlaceholderTex(w, h){
+  const ratio = w / h;
+  const CW = 400;
+  const CH = Math.round(400 / ratio);
+  const c = document.createElement('canvas'); c.width = CW; c.height = CH;
+  const ctx = c.getContext('2d');
+  const g = ctx.createLinearGradient(0, 0, CW, CH); g.addColorStop(0, '#d8a888'); g.addColorStop(1, '#c89878');
+  ctx.fillStyle = g; ctx.fillRect(0, 0, CW, CH);
+  ctx.strokeStyle = 'rgba(200,162,74,.8)'; ctx.lineWidth = 3; ctx.strokeRect(14, 14, CW - 28, CH - 28);
+
+  const cx = CW/2, cy = CH/2;
+  const scale = Math.min(CW, CH) / 300;
+  ctx.strokeStyle = '#4a2810'; ctx.lineWidth = 2.5 * scale;
+  const iw = 60 * scale, ih = 46 * scale;
+  ctx.strokeRect(cx - iw/2, cy - ih/2, iw, ih);
+  ctx.beginPath(); ctx.arc(cx, cy, 14 * scale, 0, Math.PI * 2); ctx.stroke();
+  ctx.beginPath();
+  ctx.moveTo(cx - 40*scale, cy - 13*scale);
+  ctx.lineTo(cx - 30*scale, cy - 23*scale);
+  ctx.lineTo(cx + 30*scale, cy - 23*scale);
+  ctx.lineTo(cx + 40*scale, cy - 13*scale);
+  ctx.stroke();
+
+  ctx.fillStyle = '#4a2810'; ctx.textAlign = 'center';
+  const baseFont = Math.min(CW, CH) / 15;
+  ctx.font = `500 ${baseFont}px "Cormorant Garamond", serif`;
+  ctx.fillText('[ фото ]', cx, cy + ih * 1.6);
+
+  /* Единая нейтральная подпись внизу */
+  ctx.font = `400 ${baseFont * 1.05}px "Parisienne", cursive`;
+  ctx.fillText(PHOTO_SIGN, cx, CH - 42);
+
+  const tex = new THREE.CanvasTexture(c); tex.colorSpace = THREE.SRGBColorSpace; return tex;
+}
+
+function buildPhotos(){
+  const { W, D } = ROOM;
+  ARCS.forEach((arc, i) => { if (MAIN_PHOTOS[i]) placePhoto(MAIN_PHOTOS[i], arc.x, arc.y, arc.z, 0, arc.w, arc.h, true); });
+  let vIdx = 0, hIdx = 0;
+  const nextPhoto = (slot) => slot.vertical ? VERTICAL_PHOTOS[vIdx++] : HORIZONTAL_PHOTOS[hIdx++];
+  SIDE_SLOTS_LEFT.forEach(slot => { const p = nextPhoto(slot); if (p) placePhoto(p, -W/2 + 30, slot.y, slot.z, Math.PI / 2, slot.w, slot.h); });
+  SIDE_SLOTS_RIGHT.forEach(slot => { const p = nextPhoto(slot); if (p) placePhoto(p, W/2 - 30, slot.y, slot.z, -Math.PI / 2, slot.w, slot.h); });
+  SIDE_SLOTS_FRONT.forEach(slot => { const p = nextPhoto(slot); if (p) placePhoto(p, -slot.z, slot.y, D/2 - 30, Math.PI, slot.w, slot.h); });
+}
+
+function placePhoto(photo, x, y, z, rotY, w, h, isMain = false){
+  if (!photo) return;
+  const dir = new THREE.Vector3(0, 0, 1).applyEuler(new THREE.Euler(0, rotY, 0));
+  const frameDepth = 8;
+  const frame = new THREE.Mesh(new THREE.BoxGeometry(w + 14, h + 14, frameDepth), MAT.frame);
+  frame.position.set(x, y, z); frame.rotation.y = rotY;
+  frame.position.addScaledVector(dir, -frameDepth / 2); scene.add(frame);
+  const gold = new THREE.Mesh(new THREE.PlaneGeometry(w + 6, h + 6), isMain ? MAT.goldGlow : MAT.gold);
+  gold.position.copy(frame.position).addScaledVector(dir, frameDepth / 2 + 0.1);
+  gold.rotation.y = rotY; scene.add(gold);
+  const tex = makePhotoPlaceholderTex(w, h);
+  const mat = new THREE.MeshBasicMaterial({ map: tex, toneMapped: false });
+  const mesh = new THREE.Mesh(new THREE.PlaneGeometry(w, h), mat);
+  mesh.position.copy(gold.position).addScaledVector(dir, 0.5);
+  mesh.rotation.y = rotY;
+  mesh.userData = { index: PHOTOS.indexOf(photo) };
+  scene.add(mesh);
+  photoMeshes.push(mesh);
+  texLoader.load(photo.src, (t) => {
+    t.colorSpace = THREE.SRGBColorSpace;
+    mesh.material.map = t; mesh.material.needsUpdate = true;
+  }, undefined, () => {});
+}
+
+/* ── Управление камерой ── */
+let yaw = 0, pitch = 0, targetYaw = 0, targetPitch = 0;
+const PITCH_LIMIT = Math.PI / 6;
+let dragging = false, didMove = false;
+let dragStartX = 0, dragStartY = 0, dragStartYaw = 0, dragStartPitch = 0;
+let lastInteraction = 0;
+let vineActivity = 1; let vineActivityTarget = 1;
+
+renderer.domElement.addEventListener('mousedown', (e) => {
+  dragging = true; didMove = false;
+  dragStartX = e.clientX; dragStartY = e.clientY;
+  dragStartYaw = targetYaw; dragStartPitch = targetPitch;
+  lastInteraction = performance.now();
+});
+document.addEventListener('mousemove', (e) => {
+  if (!dragging) return;
+  const dx = e.clientX - dragStartX, dy = e.clientY - dragStartY;
+  if (Math.abs(dx) + Math.abs(dy) > 4) didMove = true;
+  targetYaw = dragStartYaw - dx * 0.004;
+  targetPitch = Math.max(-PITCH_LIMIT, Math.min(PITCH_LIMIT, dragStartPitch - dy * 0.003));
+  lastInteraction = performance.now();
+});
+document.addEventListener('mouseup', () => { dragging = false; lastInteraction = performance.now(); });
+
+let tsX = 0, tsY = 0, tYaw0 = 0, tPit0 = 0;
+renderer.domElement.addEventListener('touchstart', (e) => {
+  if (e.touches.length !== 1) return;
+  const t = e.touches[0]; dragging = true; didMove = false;
+  tsX = t.clientX; tsY = t.clientY; tYaw0 = targetYaw; tPit0 = targetPitch;
+  lastInteraction = performance.now();
+}, { passive: true });
+renderer.domElement.addEventListener('touchmove', (e) => {
+  if (!dragging || e.touches.length !== 1) return;
+  const t = e.touches[0];
+  const dx = t.clientX - tsX, dy = t.clientY - tsY;
+  if (Math.abs(dx) + Math.abs(dy) > 8) didMove = true;
+  targetYaw = tYaw0 - dx * 0.005;
+  targetPitch = Math.max(-PITCH_LIMIT, Math.min(PITCH_LIMIT, tPit0 - dy * 0.004));
+  lastInteraction = performance.now();
+}, { passive: true });
+renderer.domElement.addEventListener('touchend', () => { dragging = false; lastInteraction = performance.now(); });
+
+const raycaster = new THREE.Raycaster();
+const pointer = new THREE.Vector2(-10, -10);
+
+renderer.domElement.addEventListener('mousemove', (e) => {
+  pointer.x = (e.clientX / window.innerWidth) * 2 - 1;
+  pointer.y = -(e.clientY / window.innerHeight) * 2 + 1;
+});
+renderer.domElement.addEventListener('click', (e) => {
+  if (didMove){ didMove = false; return; }
+  pointer.x = (e.clientX / window.innerWidth) * 2 - 1;
+  pointer.y = -(e.clientY / window.innerHeight) * 2 + 1;
+  doClick();
+});
+renderer.domElement.addEventListener('touchend', (e) => {
+  if (didMove){ didMove = false; return; }
+  if (e.changedTouches.length !== 1) return;
+  const t = e.changedTouches[0];
+  pointer.x = (t.clientX / window.innerWidth) * 2 - 1;
+  pointer.y = -(t.clientY / window.innerHeight) * 2 + 1;
+  doClick();
+});
+function doClick(){
+  raycaster.setFromCamera(pointer, camera);
+  const hits = raycaster.intersectObjects(photoMeshes, false);
+  if (hits.length > 0) openViewer(hits[0].object.userData.index);
+}
+
+/* ── Viewer ── */
+let currentIdx = -1;
+
+function openViewer(idx){
+  currentIdx = idx;
+  const p = PHOTOS[idx];
+  if (!p) return;
+  els.viewerImg.style.display = 'block';
+  els.viewerPlaceholder.style.display = 'none';
+  els.viewerImg.style.opacity = '0';
+  const img = new Image();
+  img.onload = () => { els.viewerImg.src = p.src; els.viewerImg.alt = PHOTO_SIGN; els.viewerImg.style.opacity = '1'; };
+  img.onerror = () => { els.viewerImg.style.display = 'none'; els.viewerPlaceholder.style.display = 'flex'; };
+  img.src = p.src;
+  els.viewer.classList.add('show');
+  if (!openedSet.has(idx)){
+    openedSet.add(idx);
+    try { localStorage.setItem(STORAGE_KEY, JSON.stringify([...openedSet])); } catch(_){}
+    updateCounter();
+  }
+}
+function closeViewer(){ els.viewer.classList.remove('show'); }
+function stepViewer(dir){
+  if (currentIdx < 0) return;
+  currentIdx = (currentIdx + dir + PHOTOS.length) % PHOTOS.length;
+  openViewer(currentIdx);
+}
+
+els.viewerClose.addEventListener('click', closeViewer);
+els.viewerPrev.addEventListener('click', () => stepViewer(-1));
+els.viewerNext.addEventListener('click', () => stepViewer(1));
+els.viewer.addEventListener('click', (e) => { if (e.target === els.viewer) closeViewer(); });
+document.addEventListener('keydown', (e) => {
+  if (!els.viewer.classList.contains('show')) return;
+  if (e.key === 'Escape') closeViewer();
+  if (e.key === 'ArrowLeft') stepViewer(-1);
+  if (e.key === 'ArrowRight') stepViewer(1);
+});
+
+let vX = null;
+els.viewer.addEventListener('touchstart', (e) => { vX = e.touches[0].clientX; }, { passive: true });
+els.viewer.addEventListener('touchend', (e) => {
+  if (vX === null) return;
+  const dx = e.changedTouches[0].clientX - vX;
+  if (Math.abs(dx) > 50) stepViewer(dx < 0 ? 1 : -1);
+  vX = null;
+});
+
+function updateCounter(){
+  els.counter.innerHTML = `<span class="num">${openedSet.size}</span> / ${PHOTOS.length}`;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   ФИНАЛ — 3 слайда
+   ═══════════════════════════════════════════════════════════ */
+const FINALE_SLIDES = [
+  { type: 'text', text: 'Год назад мы сказали друг другу «да».\nЭто был только первый год — а впереди вся жизнь.' },
+  { type: 'photo', src: 'daughter.png', ratio: '4 / 3', caption: '7 июля 2026 года родилась Анна.\nИ нас стало больше.' },
+  { type: 'final', src: 'family.jpg', ratio: '4 / 5', text: 'Теперь нас пятеро.\nИ это только начало.' }
+];
+
+let slideIndex = 0;
+let finaleActive = false;
+let slideTimeout = null;
+
+function buildDots(){
+  els.finaleDots.innerHTML = '';
+  FINALE_SLIDES.forEach((_, i) => {
+    const d = document.createElement('span');
+    d.className = 'finale-dot' + (i === slideIndex ? ' active' : '');
+    els.finaleDots.appendChild(d);
+  });
+}
+function updateDots(){
+  [...els.finaleDots.children].forEach((d, i) => d.classList.toggle('active', i === slideIndex));
+}
+
+function renderSlide(s){
+  const inner = els.finaleInner;
+  inner.innerHTML = '';
+  if (s.type === 'text'){
+    const p = document.createElement('p');
+    p.className = 'finale-text';
+    p.style.whiteSpace = 'pre-line';
+    p.textContent = s.text;
+    inner.appendChild(p);
+    els.finaleHint.classList.remove('hide');
+    return;
+  }
+  const wrap = document.createElement('div');
+  wrap.className = 'finale-photo-wrap';
+  wrap.style.aspectRatio = s.ratio || '3 / 4';
+  const img = document.createElement('img');
+  img.className = 'finale-photo';
+  img.src = s.src;
+  img.alt = '';
+  const ph = document.createElement('div');
+  ph.className = 'finale-photo-ph';
+  ph.innerHTML = `<svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="14" width="52" height="38" rx="3"/><circle cx="32" cy="33" r="10"/><path d="M22 14 l3 -5 h14 l3 5"/></svg><p>${s.src}</p>`;
+  img.addEventListener('error', () => { img.style.display = 'none'; ph.style.display = 'flex'; });
+  img.addEventListener('load', () => { img.style.display = 'block'; ph.style.display = 'none'; });
+  wrap.appendChild(img); wrap.appendChild(ph);
+  inner.appendChild(wrap);
+
+  if (s.caption){
+    const cap = document.createElement('p');
+    cap.className = 'finale-text small';
+    cap.style.whiteSpace = 'pre-line';
+    cap.textContent = s.caption;
+    inner.appendChild(cap);
+  }
+  if (s.type === 'final'){
+    const fin = document.createElement('p');
+    fin.className = 'finale-text gold';
+    fin.style.whiteSpace = 'pre-line';
+    fin.textContent = s.text;
+    inner.appendChild(fin);
+    const acts = document.createElement('div');
+    acts.className = 'finale-actions';
+    const b1 = document.createElement('button');
+    b1.type = 'button'; b1.className = 'btn primary'; b1.textContent = 'Смотреть снова';
+    b1.addEventListener('click', (e) => { e.stopPropagation(); watchAgain(); });
+    const b2 = document.createElement('button');
+    b2.type = 'button'; b2.className = 'btn'; b2.textContent = 'Поделиться';
+    b2.addEventListener('click', (e) => { e.stopPropagation(); shareMemory(); });
+    acts.appendChild(b1); acts.appendChild(b2);
+    inner.appendChild(acts);
+    els.finaleHint.classList.add('hide');
+  } else {
+    els.finaleHint.classList.remove('hide');
+  }
+}
+
+function showSlide(i){
+  slideIndex = i;
+  clearTimeout(slideTimeout);
+  const inner = els.finaleInner;
+  inner.classList.add('fade');
+  slideTimeout = window.setTimeout(() => {
+    renderSlide(FINALE_SLIDES[i]);
+    updateDots();
+    requestAnimationFrame(() => inner.classList.remove('fade'));
+  }, 420);
+}
+function nextSlide(){
+  if (!finaleActive) return;
+  if (slideIndex >= FINALE_SLIDES.length - 1) return;
+  showSlide(slideIndex + 1);
+}
+
+function showFinale(){
+  if (finaleActive) return;
+  finaleActive = true;
+  slideIndex = 0;
+  closeViewer();
+  els.finale.classList.add('show');
+  dimScene(true);
+  buildDots();
+  const inner = els.finaleInner;
+  inner.classList.remove('fade');
+  inner.innerHTML = '';
+  slideTimeout = window.setTimeout(() => { renderSlide(FINALE_SLIDES[0]); updateDots(); }, 900);
+}
+function watchAgain(){
+  finaleActive = false;
+  clearTimeout(slideTimeout);
+  els.finale.classList.remove('show');
+  els.finaleInner.innerHTML = '';
+  els.finaleDots.innerHTML = '';
+  renderer.domElement.style.transition = 'opacity 1.2s ease';
+  renderer.domElement.style.opacity = '1';
+  vineActivityTarget = 1;
+  lastInteraction = performance.now();
+}
+
+async function shareMemory(){
+  const data = { title: 'Комната воспоминаний · Максим & Анастасия', text: '10 · 10 · 2025 — год, который изменил всё.', url: location.href };
+  try {
+    if (navigator.share){ await navigator.share(data); }
+    else if (navigator.clipboard && location.protocol !== 'file:'){ await navigator.clipboard.writeText(location.href); }
+  } catch(_){}
+}
+
+function dimScene(on){
+  renderer.domElement.style.transition = 'opacity 1.8s ease';
+  renderer.domElement.style.opacity = on ? '0.08' : '1';
+  vineActivityTarget = on ? 0 : 1;
+}
+
+els.finale.addEventListener('click', (e) => {
+  if (e.target.closest('button')) return;
+  nextSlide();
+});
+document.addEventListener('keydown', (e) => {
+  if (!finaleActive) return;
+  if (e.key === ' ' || e.key === 'Enter' || e.key === 'ArrowRight'){ e.preventDefault(); nextSlide(); }
+});
+els.finishBtn.addEventListener('click', () => {
+  if (openedSet.size === 0){ openViewer(0); return; }
+  showFinale();
+});
+
+/* ═══════════════════════════════════════════════════════════
+   Пасхалка — долгое нажатие на «Максим & Анастасия» в шапке
+   ═══════════════════════════════════════════════════════════ */
+let easterTimer = null;
+if (els.uiNames){
+  const startEaster = (e) => {
+    if (e && e.type === 'mousedown') e.preventDefault();
+    clearTimeout(easterTimer);
+    easterTimer = setTimeout(() => { els.easterEgg.classList.add('show'); }, 1200);
+  };
+  const cancelEaster = () => clearTimeout(easterTimer);
+  els.uiNames.addEventListener('mousedown', startEaster);
+  els.uiNames.addEventListener('mouseup', cancelEaster);
+  els.uiNames.addEventListener('mouseleave', cancelEaster);
+  els.uiNames.addEventListener('touchstart', startEaster, { passive: true });
+  els.uiNames.addEventListener('touchend', cancelEaster);
+  els.uiNames.addEventListener('touchcancel', cancelEaster);
+}
+els.easterClose.addEventListener('click', () => els.easterEgg.classList.remove('show'));
+els.easterEgg.addEventListener('click', (e) => { if (e.target === els.easterEgg) els.easterEgg.classList.remove('show'); });
+
+/* ── Амбиентный звук ── */
+let audioCtx = null; let audioGain = null; let audioMuted = false;
+
+function createAmbientSound(){
+  try {
+    const Ctx = window.AudioContext || window.webkitAudioContext;
+    if (!Ctx) return;
+    audioCtx = new Ctx();
+    const bufferSize = audioCtx.sampleRate * 2;
+    const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
+    const data = buffer.getChannelData(0);
+    let b0=0,b1=0,b2=0,b3=0,b4=0,b5=0,b6=0;
+    for (let i = 0; i < bufferSize; i++){
+      const white = Math.random() * 2 - 1;
+      b0 = 0.99886*b0 + white*0.0555179; b1 = 0.99332*b1 + white*0.0750759;
+      b2 = 0.96900*b2 + white*0.1538520; b3 = 0.86650*b3 + white*0.3104856;
+      b4 = 0.55000*b4 + white*0.5329522; b5 = -0.7616*b5 - white*0.0168980;
+      data[i] = (b0+b1+b2+b3+b4+b5+b6+white*0.5362) * 0.08;
+      b6 = white * 0.115926;
+    }
+    const source = audioCtx.createBufferSource(); source.buffer = buffer; source.loop = true;
+    const filter = audioCtx.createBiquadFilter(); filter.type = 'lowpass'; filter.frequency.value = 380; filter.Q.value = 0.8;
+    audioGain = audioCtx.createGain(); audioGain.gain.value = 0.055;
+    source.connect(filter); filter.connect(audioGain); audioGain.connect(audioCtx.destination); source.start();
+    const osc = audioCtx.createOscillator(); osc.type = 'sine'; osc.frequency.value = 110;
+    const oscGain = audioCtx.createGain(); oscGain.gain.value = 0.008;
+    osc.connect(oscGain).connect(audioCtx.destination); osc.start();
+  } catch(_){}
+}
+function toggleMute(){
+  if (!audioCtx) return;
+  audioMuted = !audioMuted;
+  els.muteBtn.classList.toggle('muted', audioMuted);
+  if (audioGain){ audioGain.gain.setTargetAtTime(audioMuted ? 0 : 0.055, audioCtx.currentTime, 0.25); }
+}
+els.muteBtn.addEventListener('click', (e) => {
+  e.stopPropagation();
+  if (!audioCtx) createAmbientSound();
+  else if (audioCtx.state === 'suspended') audioCtx.resume();
+  toggleMute();
+});
+
+/* ── Анимация ── */
+const clock = new THREE.Clock();
+let running = false;
+let idleStart = 0;
+
+function animate(){
+  if (!running) return;
+  const t = clock.getElapsedTime();
+  yaw += (targetYaw - yaw) * 0.08;
+  pitch += (targetPitch - pitch) * 0.08;
+
+  const now = performance.now();
+  let idleX = 0, idleY = 0;
+  if (now - lastInteraction > 2000){
+    if (idleStart === 0) idleStart = now;
+    const idleT = (now - idleStart) * 0.001;
+    idleX = Math.sin(idleT * 0.25) * 0.02;
+    idleY = Math.sin(idleT * 0.4) * 0.008;
+  } else { idleStart = 0; }
+  camera.rotation.y = yaw + idleX;
+  camera.rotation.x = pitch + idleY;
+  camera.position.y = -ROOM.H / 2 + ROOM.EYE + Math.sin(t * 0.5) * 1.2;
+  camera.position.x = Math.sin(t * 0.35) * 1.0;
+
+  realLights.forEach(({ light, base, phase }) => { light.intensity = base + Math.sin(t * 1.4 + phase) * 0.04; });
+  beamMeshes.forEach((beam, i) => { beam.material.opacity = 0.24 + Math.sin(t * 0.6 + i * 1.1) * 0.06; });
+
+  vineActivity += (vineActivityTarget - vineActivity) * 0.03;
+  vineFlowers.forEach(({ mesh, phase }) => { const k = 1 + Math.sin(t * 0.7 + phase) * 0.06 * vineActivity; mesh.scale.set(k, k, 1); });
+  vineBulbs.forEach(({ mesh, phase }) => { const k = 1 + Math.sin(t * 2.2 + phase) * 0.25 * vineActivity; mesh.scale.set(k, k, k); });
+
+  raycaster.setFromCamera(pointer, camera);
+  const hits = raycaster.intersectObjects(photoMeshes, false);
+  const newHover = hits.length > 0 ? hits[0].object : null;
+  photoMeshes.forEach(m => {
+    const target = (m === newHover) ? 1.08 : 1;
+    m.scale.x += (target - m.scale.x) * 0.2;
+    m.scale.y += (target - m.scale.y) * 0.2;
+  });
+  document.body.style.cursor = newHover ? 'pointer' : 'default';
+
+  if (composer) composer.render();
+  else renderer.render(scene, camera);
+  requestAnimationFrame(animate);
+}
+
+window.addEventListener('resize', () => {
+  camera.aspect = window.innerWidth / window.innerHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(window.innerWidth, window.innerHeight);
+  if (composer) composer.setSize(window.innerWidth, window.innerHeight);
+});
+
+/* ── Инициализация ── */
+async function init(){
+  const safetyTimer = setTimeout(() => {
+    if (els.loader && !els.loader.classList.contains('hide')){
+      els.loader.classList.add('hide');
+      setTimeout(() => { els.loader.style.display = 'none'; }, 700);
+    }
+  }, 3000);
+
+  try {
+    if (document.fonts && document.fonts.load){
+      try {
+        await Promise.race([
+          Promise.all([
+            document.fonts.load('normal normal 320px "Pinyon Script"', 'M'),
+            document.fonts.load('normal normal 320px "Pinyon Script"', 'A'),
+            document.fonts.load('normal normal 400px "Parisienne"', 'M')
+          ]),
+          new Promise(r => setTimeout(r, 900))
+        ]);
+      } catch(_){}
+    }
+  } catch(_){}
+
+  buildRoom(); buildWallPanels(); buildDrapery(); buildRunner();
+  buildColumns(); buildArches(); buildMonogram(); buildLights(); buildLamps();
+  buildCandles(); buildHangingVines(); buildFloorDecor(); buildPhotos();
+
+  if (QUALITY.bloom && EffectComposer && RenderPass && UnrealBloomPass){
+    try {
+      composer = new EffectComposer(renderer);
+      composer.addPass(new RenderPass(scene, camera));
+      composer.addPass(new UnrealBloomPass(new THREE.Vector2(window.innerWidth, window.innerHeight), 0.12, 0.5, 0.85));
+    } catch(_){ composer = null; }
+  }
+  if (QUALITY.envMap && RoomEnvironment){
+    try {
+      const pmrem = new THREE.PMREMGenerator(renderer);
+      pmrem.compileEquirectangularShader();
+      scene.environment = pmrem.fromScene(new RoomEnvironment(), 0.04).texture;
+      pmrem.dispose();
+    } catch(_){}
+  }
+
+  updateCounter();
+  clearTimeout(safetyTimer);
+  window.setTimeout(() => {
+    els.loader.classList.add('hide');
+    window.setTimeout(() => { els.loader.style.display = 'none'; }, 700);
+  }, 1600);
+}
+init().catch(e => {
+  console.error('init() failed:', e);
+  if (els.loader){ els.loader.classList.add('hide'); setTimeout(() => { els.loader.style.display = 'none'; }, 700); }
+});
+
+let doorOpened = false;
+function openDoor(){
+  if (doorOpened) return;
+  doorOpened = true;
+  els.doorScreen.classList.add('opening');
+  window.setTimeout(() => {
+    renderer.domElement.style.opacity = '1';
+    running = true;
+    clock.start();
+    animate();
+    els.uiTop.classList.add('show');
+    els.uiBottom.classList.add('show');
+    els.tip.classList.add('show');
+    window.setTimeout(() => els.tip.classList.remove('show'), 3400);
+    els.muteBtn.classList.add('show');
+  }, 600);
+  window.setTimeout(() => { els.doorScreen.style.display = 'none'; }, 1500);
+  window.setTimeout(() => {
+    targetYaw = 0.35; lastInteraction = performance.now();
+    window.setTimeout(() => { targetYaw = 0; lastInteraction = performance.now(); }, 2200);
+  }, 1800);
+  if (!audioCtx) createAmbientSound();
+  else if (audioCtx.state === 'suspended') audioCtx.resume();
+}
+els.doorScreen.addEventListener('click', openDoor);
+</script>
+</body>
+</html>
