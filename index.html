@@ -28,7 +28,6 @@ html,body{
 button{font-family:inherit;border:0;background:transparent;cursor:pointer;color:inherit;-webkit-tap-highlight-color:transparent;}
 canvas{display:block;position:fixed;inset:0;touch-action:none;}
 
-/* ── Загрузчик ── */
 .loader{position:fixed;inset:0;z-index:9999;display:flex;align-items:center;justify-content:center;background:radial-gradient(circle at 50% 40%, #faf3e6 0%, #e8dcc6 100%);transition:opacity .7s,visibility .7s;}
 .loader.hide{opacity:0;visibility:hidden;pointer-events:none;}
 .loader-inner{text-align:center;padding:0 24px;max-width:640px;}
@@ -40,7 +39,6 @@ canvas{display:block;position:fixed;inset:0;touch-action:none;}
 @keyframes fu{from{opacity:0;transform:translateY(12px);}to{opacity:1;transform:none;}}
 @keyframes gl{from{width:0;}to{width:min(320px,62vw);}}
 
-/* ── Дверь ── */
 .door-screen{position:fixed;inset:0;z-index:100;display:flex;align-items:center;justify-content:center;overflow:hidden;background:radial-gradient(ellipse 80% 60% at 50% 45%, #faf3e6 0%, #ecdfc4 55%, #d9c8a8 100%);transition:opacity 1s ease, transform 1s ease;}
 .door-screen.opening{opacity:0;transform:scale(1.05);pointer-events:none;}
 .door-titles{position:absolute;top:5%;left:0;right:0;text-align:center;z-index:5;pointer-events:none;}
@@ -78,7 +76,6 @@ canvas{display:block;position:fixed;inset:0;touch-action:none;}
 .door-hint .key{display:inline-block;color:var(--gold-deep);margin:0 8px;font-size:20px;font-family:var(--font-hand);}
 @keyframes hintPulse{0%,100%{opacity:.55;}50%{opacity:1;}}
 
-/* ── Верхняя панель ── */
 .ui-top{position:fixed;top:0;left:0;right:0;z-index:10;padding:20px 24px 40px;text-align:center;pointer-events:none;background:linear-gradient(to bottom, rgba(245,237,225,.85), transparent);opacity:0;transition:opacity .8s ease .4s;}
 .ui-top.show{opacity:1;}
 .ui-eyebrow{font-size:9px;letter-spacing:.5em;text-transform:uppercase;color:rgba(58,36,24,.55);padding-left:.5em;margin-bottom:6px;}
@@ -91,7 +88,6 @@ canvas{display:block;position:fixed;inset:0;touch-action:none;}
 .ui-names em{color:#d4a860;font-family:var(--font-soft);font-style:italic;margin:0 4px;font-size:.9em;}
 .ui-date{font-size:9px;letter-spacing:.4em;text-transform:uppercase;color:rgba(58,36,24,.5);padding-left:.4em;margin-top:5px;}
 
-/* ── Нижняя панель ── */
 .ui-bottom{position:fixed;bottom:0;left:0;right:0;z-index:10;padding:40px 20px 22px;text-align:center;pointer-events:none;background:linear-gradient(to top, rgba(245,237,225,.9), transparent);opacity:0;transition:opacity .8s ease .4s;}
 .ui-bottom.show{opacity:1;}
 .ui-hint{font-family:var(--font-soft);font-size:22px;color:rgba(58,36,24,.72);margin-bottom:10px;}
@@ -103,14 +99,12 @@ canvas{display:block;position:fixed;inset:0;touch-action:none;}
 .ui-counter{margin-top:8px;font-family:var(--font-title);font-style:italic;font-size:13px;letter-spacing:.22em;color:rgba(58,36,24,.6);}
 .ui-counter .num{color:var(--gold-deep);font-family:var(--font-script);font-style:normal;font-size:22px;letter-spacing:0;vertical-align:-3px;margin:0 2px;}
 
-/* ── Кнопка звука ── */
 .mute-btn{position:fixed;top:14px;right:14px;z-index:40;width:42px;height:42px;display:grid;place-items:center;background:rgba(252,247,238,.85);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);border:1px solid rgba(200,162,74,.5);border-radius:50%;box-shadow:0 4px 14px rgba(120,90,40,.15);transition:all .25s;opacity:0;pointer-events:none;}
 .mute-btn.show{opacity:1;pointer-events:auto;}
 .mute-btn svg{width:20px;height:20px;stroke:var(--ink);fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;}
 .mute-btn.muted .sound-on{display:none;}
 .mute-btn:not(.muted) .sound-off{display:none;}
 
-/* ── Подсказка-тип ── */
 .tip{position:fixed;top:50%;left:50%;z-index:20;transform:translate(-50%,-50%);padding:16px 28px;background:rgba(252,247,238,.92);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);border:1px solid rgba(200,162,74,.45);border-radius:50px;font-family:var(--font-soft);font-size:26px;color:var(--ink);white-space:nowrap;pointer-events:none;opacity:0;display:flex;align-items:center;gap:12px;}
 .tip.show{animation:tipShow 3.2s ease forwards;}
 .tip-cursor{width:22px;height:22px;flex:0 0 auto;border-radius:50%;border:2px solid var(--gold-deep);position:relative;animation:tipPulse 1.4s ease-in-out infinite;}
@@ -118,7 +112,6 @@ canvas{display:block;position:fixed;inset:0;touch-action:none;}
 @keyframes tipPulse{0%,100%{transform:scale(1);opacity:.85;}50%{transform:scale(1.25);opacity:1;}}
 @keyframes tipShow{0%{opacity:0;transform:translate(-50%,-40%);}12%,78%{opacity:1;transform:translate(-50%,-50%);}100%{opacity:0;transform:translate(-50%,-55%);}}
 
-/* ── Просмотрщик фото ── */
 .viewer{position:fixed;inset:0;z-index:200;display:flex;align-items:center;justify-content:center;padding:64px 16px 40px;background:rgba(245,237,225,.96);-webkit-backdrop-filter:blur(18px);backdrop-filter:blur(18px);opacity:0;pointer-events:none;transition:opacity .35s ease;}
 .viewer.show{opacity:1;pointer-events:auto;}
 .viewer-fig{display:flex;flex-direction:column;align-items:center;gap:18px;max-width:100%;max-height:100%;opacity:0;transform:scale(.95);transition:opacity .4s,transform .5s cubic-bezier(.2,.9,.3,1);}
@@ -136,7 +129,6 @@ canvas{display:block;position:fixed;inset:0;touch-action:none;}
 .viewer-nav.prev{left:10px;}
 .viewer-nav.next{right:10px;}
 
-/* ── Финал ── */
 .finale{position:fixed;inset:0;z-index:150;background:radial-gradient(ellipse at 50% 42%, rgba(34,22,12,.96) 0%, rgba(8,5,3,.995) 78%);opacity:0;pointer-events:none;transition:opacity 1.4s ease;overflow:hidden;cursor:pointer;}
 .finale.show{opacity:1;pointer-events:auto;}
 .finale-inner{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:60px 24px 80px;text-align:center;opacity:1;transition:opacity .42s ease;}
@@ -161,7 +153,6 @@ canvas{display:block;position:fixed;inset:0;touch-action:none;}
 .finale-dot{width:6px;height:6px;border-radius:50%;background:rgba(232,210,166,.22);transition:background .35s, transform .35s;}
 .finale-dot.active{background:#e0b866;transform:scale(1.35);}
 
-/* ── Пасхалка ── */
 .easter-egg{
   position:fixed;inset:0;z-index:250;
   display:flex;align-items:center;justify-content:center;
@@ -182,7 +173,6 @@ canvas{display:block;position:fixed;inset:0;touch-action:none;}
 .easter-text{font-family:var(--font-title);font-style:italic;font-size:clamp(17px,3.5vw,20px);line-height:1.55;color:#3a2418;margin-bottom:26px;}
 .easter-text em{color:#a8801f;font-style:italic;font-weight:500;}
 
-/* ── Адаптив ── */
 @media (max-width:600px){
   .door-arch-wrap{width:94vw;height:74vh;}.door{width:68vw;height:52vh;}
   .hanging-vine{width:80px;}.hanging-vine.left{left:0;}.hanging-vine.right{right:0;}
@@ -210,7 +200,6 @@ canvas{display:block;position:fixed;inset:0;touch-action:none;}
 </head>
 <body>
 
-<!-- Watchdog: подсказки, если 3D долго не грузится -->
 <script>
 (function(){
   var startTs = Date.now();
@@ -354,10 +343,6 @@ const QUALITY = {
 const COUPLE = { groom:'Максим', bride:'Анастасия', date:'10 · 10 · 2025' };
 const STORAGE_KEY = 'memory-room-opened-v3';
 
-/* ═══════════════════════════════════════════════════════════
-   36 ФОТО. Единый нейтральный знак — «Комната воспоминаний».
-   Файлы: photo1.jpg … photo36.jpg в одной папке с index.html
-   ═══════════════════════════════════════════════════════════ */
 const PHOTO_SIGN = 'Комната воспоминаний';
 const PHOTOS = [
   'photo1.jpg','photo2.jpg','photo3.jpg','photo4.jpg','photo5.jpg','photo6.jpg',
@@ -368,10 +353,6 @@ const PHOTOS = [
   'photo31.jpg','photo32.jpg','photo33.jpg','photo34.jpg','photo35.jpg','photo36.jpg'
 ].map(src => ({ src }));
 
-/* Распределение по стенам:
-   MAIN_PHOTOS — 2 вертикальных для арок
-   VERTICAL_PHOTOS — 3 вертикальных на стены
-   HORIZONTAL_PHOTOS — 31 горизонтальных на стены */
 const MAIN_PHOTOS = [PHOTOS[0], PHOTOS[1]];
 const VERTICAL_PHOTOS = [PHOTOS[2], PHOTOS[3], PHOTOS[4]];
 const HORIZONTAL_PHOTOS = PHOTOS.slice(5);
@@ -422,7 +403,6 @@ camera.rotation.order = 'YXZ';
 
 let composer = null;
 
-/* ── Текстуры ── */
 function makeFlowerTex(){
   const S = 128; const c = document.createElement('canvas'); c.width = c.height = S;
   const ctx = c.getContext('2d'); ctx.clearRect(0, 0, S, S);
@@ -525,9 +505,6 @@ function addContactShadow(x, z, radius){
   shadow.renderOrder = 1; scene.add(shadow);
 }
 
-/* ═══════════════════════════════════════════════════════════
-   Монограмма M&A с завитушками (шрифт Pinyon Script)
-   ═══════════════════════════════════════════════════════════ */
 function drawMonogramToCanvas(canvas){
   const ink = '#4a2810';
   const gold = '#c8a24a';
@@ -614,7 +591,6 @@ function makeMonogramTex(){
   return tex;
 }
 
-/* ── Материалы ── */
 const MAT = {
   wall: new THREE.MeshStandardMaterial({ color: 0xe8ddc8, roughness: .95 }),
   wallSide: new THREE.MeshStandardMaterial({ color: 0xf4e9d2, roughness: .95 }),
@@ -641,7 +617,6 @@ const MAT = {
   beam: new THREE.MeshBasicMaterial({ map: TEX.beam, transparent: true, depthWrite: false, blending: THREE.AdditiveBlending, side: THREE.DoubleSide, opacity: 0.28 })
 };
 
-/* ── Комната ── */
 function buildRoom(){
   const { W, H, D } = ROOM;
   const back = new THREE.Mesh(new THREE.PlaneGeometry(W, H), MAT.wall); back.position.set(0, 0, -D / 2); scene.add(back);
@@ -804,7 +779,6 @@ function buildMonogram(){
   mesh.position.set(0, -H/2 + 340, -D/2 + 70); scene.add(mesh);
 }
 
-/* ── Светильники ── */
 const realLights = []; let beamMeshes = [];
 
 function buildLamps(){
@@ -850,7 +824,6 @@ function addLamp(x, y, z, radius, isChandelier, withLight, isCentral){
   }
 }
 
-/* ── Лианы ── */
 const vineFlowers = []; const vineBulbs = [];
 
 function makeVine(x0, yTop, z0, length, opts = {}){
@@ -916,7 +889,6 @@ function buildHangingVines(){
   cornerVines.forEach((v, i) => { if (i % step !== 0) return; makeVine(v.x, topY, v.z, 300, { sway: 12, turns: 1.6 }); });
 }
 
-/* ── Свечи ── */
 function buildCandles(){
   const { W, H, D } = ROOM;
   const allClusters = [
@@ -962,7 +934,6 @@ function buildFloorDecor(){
   });
 }
 
-/* ── Основное освещение ── */
 function buildLights(){
   const { W, H, D } = ROOM;
   scene.add(new THREE.AmbientLight(0xf5e6d0, 0.7));
@@ -986,13 +957,6 @@ function buildLights(){
   });
 }
 
-/* ═══════════════════════════════════════════════════════════
-   Раскладка фото на стенах
-   Левая: 11 (1 вертикальное + 10 горизонтальных)
-   Правая: 11 (1 вертикальное + 10 горизонтальных)
-   Передняя: 12 (1 вертикальное + 11 горизонтальных)
-   + 2 вертикальных в арках = 36
-   ═══════════════════════════════════════════════════════════ */
 const SIDE_SLOTS_LEFT = [
   { y:  200, z: -525, w: 290, h: 140 },
   { y:   20, z: -525, w: 290, h: 140 },
@@ -1032,7 +996,6 @@ try {
   if (Array.isArray(saved)) saved.forEach(i => openedSet.add(i));
 } catch(_){}
 
-/* Заглушка фото — без времени, только нейтральный знак */
 function makePhotoPlaceholderTex(w, h){
   const ratio = w / h;
   const CW = 400;
@@ -1061,11 +1024,36 @@ function makePhotoPlaceholderTex(w, h){
   ctx.font = `500 ${baseFont}px "Cormorant Garamond", serif`;
   ctx.fillText('[ фото ]', cx, cy + ih * 1.6);
 
-  /* Единая нейтральная подпись внизу */
   ctx.font = `400 ${baseFont * 1.05}px "Parisienne", cursive`;
   ctx.fillText(PHOTO_SIGN, cx, CH - 42);
 
   const tex = new THREE.CanvasTexture(c); tex.colorSpace = THREE.SRGBColorSpace; return tex;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   Обрезка текстуры под пропорции рамки (как CSS object-fit: cover).
+   Никакого растяжения — лишнее обрезается по центру.
+   ═══════════════════════════════════════════════════════════ */
+function fitTextureToFrame(t, texImage, frameW, frameH){
+  const imgW = texImage.width;
+  const imgH = texImage.height;
+  if (!imgW || !imgH) return;
+  const photoRatio = imgW / imgH;
+  const frameRatio = frameW / frameH;
+  if (photoRatio > frameRatio){
+    /* Фото шире рамки — обрезаем бока */
+    const newW = frameRatio / photoRatio;
+    t.repeat.set(newW, 1);
+    t.offset.set((1 - newW) / 2, 0);
+  } else {
+    /* Фото выше рамки — обрезаем верх и низ */
+    const newH = photoRatio / frameRatio;
+    t.repeat.set(1, newH);
+    t.offset.set(0, (1 - newH) / 2);
+  }
+  t.wrapS = THREE.ClampToEdgeWrapping;
+  t.wrapT = THREE.ClampToEdgeWrapping;
+  t.needsUpdate = true;
 }
 
 function buildPhotos(){
@@ -1096,13 +1084,15 @@ function placePhoto(photo, x, y, z, rotY, w, h, isMain = false){
   mesh.userData = { index: PHOTOS.indexOf(photo) };
   scene.add(mesh);
   photoMeshes.push(mesh);
+
   texLoader.load(photo.src, (t) => {
     t.colorSpace = THREE.SRGBColorSpace;
-    mesh.material.map = t; mesh.material.needsUpdate = true;
+    fitTextureToFrame(t, t.image, w, h);
+    mesh.material.map = t;
+    mesh.material.needsUpdate = true;
   }, undefined, () => {});
 }
 
-/* ── Управление камерой ── */
 let yaw = 0, pitch = 0, targetYaw = 0, targetPitch = 0;
 const PITCH_LIMIT = Math.PI / 6;
 let dragging = false, didMove = false;
@@ -1171,7 +1161,6 @@ function doClick(){
   if (hits.length > 0) openViewer(hits[0].object.userData.index);
 }
 
-/* ── Viewer ── */
 let currentIdx = -1;
 
 function openViewer(idx){
@@ -1224,12 +1213,14 @@ function updateCounter(){
 }
 
 /* ═══════════════════════════════════════════════════════════
-   ФИНАЛ — 3 слайда
+   ФИНАЛ — 3 слайда.
+   daughter.png — вертикальный 3:4
+   family.jpg   — горизонтальный 4:3
    ═══════════════════════════════════════════════════════════ */
 const FINALE_SLIDES = [
   { type: 'text', text: 'Год назад мы сказали друг другу «да».\nЭто был только первый год — а впереди вся жизнь.' },
-  { type: 'photo', src: 'daughter.png', ratio: '4 / 3', caption: '7 июля 2026 года родилась Анна.\nИ нас стало больше.' },
-  { type: 'final', src: 'family.jpg', ratio: '4 / 5', text: 'Теперь нас пятеро.\nИ это только начало.' }
+  { type: 'photo', src: 'daughter.png', ratio: '3 / 4', caption: '7 июля 2026 года родилась Анна.\nИ нас стало больше.' },
+  { type: 'final', src: 'family.jpg',   ratio: '4 / 3', text: 'Теперь нас пятеро.\nИ это только начало.' }
 ];
 
 let slideIndex = 0;
@@ -1373,9 +1364,6 @@ els.finishBtn.addEventListener('click', () => {
   showFinale();
 });
 
-/* ═══════════════════════════════════════════════════════════
-   Пасхалка — долгое нажатие на «Максим & Анастасия» в шапке
-   ═══════════════════════════════════════════════════════════ */
 let easterTimer = null;
 if (els.uiNames){
   const startEaster = (e) => {
@@ -1394,7 +1382,6 @@ if (els.uiNames){
 els.easterClose.addEventListener('click', () => els.easterEgg.classList.remove('show'));
 els.easterEgg.addEventListener('click', (e) => { if (e.target === els.easterEgg) els.easterEgg.classList.remove('show'); });
 
-/* ── Амбиентный звук ── */
 let audioCtx = null; let audioGain = null; let audioMuted = false;
 
 function createAmbientSound(){
@@ -1436,7 +1423,6 @@ els.muteBtn.addEventListener('click', (e) => {
   toggleMute();
 });
 
-/* ── Анимация ── */
 const clock = new THREE.Clock();
 let running = false;
 let idleStart = 0;
@@ -1489,7 +1475,6 @@ window.addEventListener('resize', () => {
   if (composer) composer.setSize(window.innerWidth, window.innerHeight);
 });
 
-/* ── Инициализация ── */
 async function init(){
   const safetyTimer = setTimeout(() => {
     if (els.loader && !els.loader.classList.contains('hide')){
