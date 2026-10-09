@@ -234,7 +234,6 @@ canvas{display:block;position:fixed;inset:0;touch-action:none;}
 </head>
 <body>
 
-<!-- Watchdog -->
 <script>
 (function(){
   var startTs = Date.now();
@@ -378,10 +377,6 @@ const QUALITY = {
 const COUPLE = { groom:'Максим', bride:'Анастасия', date:'10 · 10 · 2025' };
 const STORAGE_KEY = 'memory-room-opened-v3';
 
-/* ═══════════════════════════════════════════════════════════
-   36 ФОТО. Единый нейтральный знак — «Комната воспоминаний».
-   Файлы: photo1.jpg … photo36.jpg в одной папке с index.html
-   ═══════════════════════════════════════════════════════════ */
 const PHOTO_SIGN = 'Комната воспоминаний';
 const PHOTOS = [
   'photo1.jpg','photo2.jpg','photo3.jpg','photo4.jpg','photo5.jpg','photo6.jpg',
@@ -442,7 +437,6 @@ camera.rotation.order = 'YXZ';
 
 let composer = null;
 
-/* ── Текстуры ── */
 function makeFlowerTex(){
   const S = 128; const c = document.createElement('canvas'); c.width = c.height = S;
   const ctx = c.getContext('2d'); ctx.clearRect(0, 0, S, S);
@@ -1080,9 +1074,6 @@ function buildPhotos(){
   SIDE_SLOTS_FRONT.forEach(slot => { const p = nextPhoto(slot); if (p) placePhoto(p, -slot.z, slot.y, D/2 - 30, Math.PI, slot.w, slot.h); });
 }
 
-/* ═══════════════════════════════════════════════════════════
-   Рамка подстраивается под реальные пропорции фото после загрузки
-   ═══════════════════════════════════════════════════════════ */
 function placePhoto(photo, x, y, z, rotY, w, h, isMain = false){
   if (!photo) return;
   const dir = new THREE.Vector3(0, 0, 1).applyEuler(new THREE.Euler(0, rotY, 0));
@@ -1412,7 +1403,7 @@ els.easterClose.addEventListener('click', () => els.easterEgg.classList.remove('
 els.easterEgg.addEventListener('click', (e) => { if (e.target === els.easterEgg) els.easterEgg.classList.remove('show'); });
 
 /* ═══════════════════════════════════════════════════════════
-   Амбиентный звук: тёплый шум свечей + романтичное пианино
+   Звук: шум свечей + романтичное пианино (громче, с resume)
    ═══════════════════════════════════════════════════════════ */
 let audioCtx = null;
 let audioGain = null;
@@ -1420,11 +1411,13 @@ let musicGain = null;
 let musicTimer = null;
 let audioMuted = false;
 
-function startRomanticMusic(){
+async function startRomanticMusic(){
   if (!audioCtx || musicGain) return;
+  if (audioCtx.state === 'suspended'){ try { await audioCtx.resume(); } catch(_){} }
+
   musicGain = audioCtx.createGain();
   musicGain.gain.value = 0;
-  musicGain.gain.setTargetAtTime(0.045, audioCtx.currentTime, 2.5);
+  musicGain.gain.setTargetAtTime(0.18, audioCtx.currentTime, 2.5);
   musicGain.connect(audioCtx.destination);
 
   // I – V – vi – IV (C – G – Am – F)
@@ -1436,7 +1429,7 @@ function startRomanticMusic(){
   ];
   const beat = 0.72;
   const chordDur = beat * 4;
-  let nextTime = audioCtx.currentTime + 0.8;
+  let nextTime = audioCtx.currentTime + 0.5;
 
   function playNote(freq, time, dur, gainMul){
     if (!musicGain) return;
@@ -1445,8 +1438,8 @@ function startRomanticMusic(){
     osc.frequency.value = freq;
     const g = audioCtx.createGain();
     g.gain.setValueAtTime(0, time);
-    g.gain.linearRampToValueAtTime(0.11 * gainMul, time + 0.09);
-    g.gain.exponentialRampToValueAtTime(0.0007, time + dur);
+    g.gain.linearRampToValueAtTime(0.32 * gainMul, time + 0.09);
+    g.gain.exponentialRampToValueAtTime(0.0015, time + dur);
     osc.connect(g); g.connect(musicGain);
     osc.start(time); osc.stop(time + dur + 0.15);
   }
@@ -1454,11 +1447,11 @@ function startRomanticMusic(){
   function schedule(){
     while (nextTime < audioCtx.currentTime + 6){
       const chord = chords[Math.floor(Math.random() * chords.length)];
-      playNote(chord[0] / 2, nextTime, chordDur * 0.9, 0.55);
+      playNote(chord[0], nextTime, chordDur * 0.9, 0.7);
       const pattern = [0, 1, 2, 3, 2, 1, 2, 3];
       pattern.forEach((idx, i) => {
         const oct = (i >= 4) ? 2 : 1;
-        playNote(chord[idx] * oct, nextTime + i * (chordDur / 8), beat * 1.6, 0.35);
+        playNote(chord[idx] * oct, nextTime + i * (chordDur / 8), beat * 1.6, 0.5);
       });
       nextTime += chordDur;
     }
@@ -1467,11 +1460,15 @@ function startRomanticMusic(){
   musicTimer = setInterval(schedule, 3000);
 }
 
-function createAmbientSound(){
+async function createAmbientSound(){
   try {
     const Ctx = window.AudioContext || window.webkitAudioContext;
     if (!Ctx) return;
     audioCtx = new Ctx();
+    if (audioCtx.state === 'suspended'){
+      try { await audioCtx.resume(); } catch(_){}
+    }
+
     const bufferSize = audioCtx.sampleRate * 2;
     const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
     const data = buffer.getChannelData(0);
@@ -1481,31 +1478,33 @@ function createAmbientSound(){
       b0 = 0.99886*b0 + white*0.0555179; b1 = 0.99332*b1 + white*0.0750759;
       b2 = 0.96900*b2 + white*0.1538520; b3 = 0.86650*b3 + white*0.3104856;
       b4 = 0.55000*b4 + white*0.5329522; b5 = -0.7616*b5 - white*0.0168980;
-      data[i] = (b0+b1+b2+b3+b4+b5+b6+white*0.5362) * 0.08;
+      data[i] = (b0+b1+b2+b3+b4+b5+b6+white*0.5362) * 0.15;
       b6 = white * 0.115926;
     }
     const source = audioCtx.createBufferSource(); source.buffer = buffer; source.loop = true;
-    const filter = audioCtx.createBiquadFilter(); filter.type = 'lowpass'; filter.frequency.value = 380; filter.Q.value = 0.8;
-    audioGain = audioCtx.createGain(); audioGain.gain.value = 0.055;
+    const filter = audioCtx.createBiquadFilter(); filter.type = 'lowpass'; filter.frequency.value = 500; filter.Q.value = 0.8;
+    audioGain = audioCtx.createGain(); audioGain.gain.value = 0.14;
     source.connect(filter); filter.connect(audioGain); audioGain.connect(audioCtx.destination); source.start();
-    const osc = audioCtx.createOscillator(); osc.type = 'sine'; osc.frequency.value = 110;
-    const oscGain = audioCtx.createGain(); oscGain.gain.value = 0.008;
+
+    const osc = audioCtx.createOscillator(); osc.type = 'sine'; osc.frequency.value = 180;
+    const oscGain = audioCtx.createGain(); oscGain.gain.value = 0.02;
     osc.connect(oscGain).connect(audioCtx.destination); osc.start();
 
     startRomanticMusic();
   } catch(_){}
 }
+
 function toggleMute(){
   if (!audioCtx) return;
   audioMuted = !audioMuted;
   els.muteBtn.classList.toggle('muted', audioMuted);
-  if (audioGain) audioGain.gain.setTargetAtTime(audioMuted ? 0 : 0.055, audioCtx.currentTime, 0.25);
-  if (musicGain) musicGain.gain.setTargetAtTime(audioMuted ? 0 : 0.045, audioCtx.currentTime, 0.4);
+  if (audioGain) audioGain.gain.setTargetAtTime(audioMuted ? 0 : 0.14, audioCtx.currentTime, 0.25);
+  if (musicGain) musicGain.gain.setTargetAtTime(audioMuted ? 0 : 0.18, audioCtx.currentTime, 0.4);
 }
 els.muteBtn.addEventListener('click', (e) => {
   e.stopPropagation();
   if (!audioCtx) createAmbientSound();
-  else if (audioCtx.state === 'suspended') audioCtx.resume();
+  else if (audioCtx.state === 'suspended') audioCtx.resume().catch(()=>{});
   toggleMute();
 });
 
@@ -1617,7 +1616,6 @@ init().catch(e => {
   if (els.loader){ els.loader.classList.add('hide'); setTimeout(() => { els.loader.style.display = 'none'; }, 700); }
 });
 
-/* Предзагрузка финальных изображений и всех фото комнаты */
 PHOTOS.forEach(p => { const i = new Image(); i.src = p.src; });
 ['daughter.png', 'family.jpg'].forEach(src => { const i = new Image(); i.src = src; });
 
@@ -1642,8 +1640,12 @@ function openDoor(){
     targetYaw = 0.35; lastInteraction = performance.now();
     window.setTimeout(() => { targetYaw = 0; lastInteraction = performance.now(); }, 2200);
   }, 1800);
-  if (!audioCtx) createAmbientSound();
-  else if (audioCtx.state === 'suspended') audioCtx.resume();
+
+  if (!audioCtx){
+    createAmbientSound();
+  } else if (audioCtx.state === 'suspended'){
+    audioCtx.resume().catch(()=>{});
+  }
 }
 els.doorScreen.addEventListener('click', openDoor);
 </script>
