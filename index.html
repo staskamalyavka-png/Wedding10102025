@@ -28,7 +28,6 @@ html,body{
 button{font-family:inherit;border:0;background:transparent;cursor:pointer;color:inherit;-webkit-tap-highlight-color:transparent;}
 canvas{display:block;position:fixed;inset:0;touch-action:none;}
 
-/* ── Загрузчик ── */
 .loader{position:fixed;inset:0;z-index:9999;display:flex;align-items:center;justify-content:center;background:radial-gradient(circle at 50% 40%, #faf3e6 0%, #e8dcc6 100%);transition:opacity .7s,visibility .7s;cursor:wait;}
 .loader.hide{opacity:0;visibility:hidden;pointer-events:none;}
 .loader-inner{text-align:center;padding:0 24px;max-width:640px;}
@@ -49,7 +48,6 @@ canvas{display:block;position:fixed;inset:0;touch-action:none;}
 @keyframes fu{from{opacity:0;transform:translateY(12px);}to{opacity:1;transform:none;}}
 @keyframes gl{from{width:0;}to{width:min(320px,62vw);}}
 
-/* ── Дверь ── */
 .door-screen{position:fixed;inset:0;z-index:100;display:flex;align-items:center;justify-content:center;overflow:hidden;background:radial-gradient(ellipse 80% 60% at 50% 45%, #faf3e6 0%, #ecdfc4 55%, #d9c8a8 100%);transition:opacity 1s ease, transform 1s ease;}
 .door-screen.opening{opacity:0;transform:scale(1.05);pointer-events:none;}
 .door-titles{position:absolute;top:5%;left:0;right:0;text-align:center;z-index:5;pointer-events:none;}
@@ -87,7 +85,6 @@ canvas{display:block;position:fixed;inset:0;touch-action:none;}
 .door-hint .key{display:inline-block;color:var(--gold-deep);margin:0 8px;font-size:20px;font-family:var(--font-hand);}
 @keyframes hintPulse{0%,100%{opacity:.55;}50%{opacity:1;}}
 
-/* ── Верхняя панель ── */
 .ui-top{position:fixed;top:0;left:0;right:0;z-index:10;padding:20px 24px 40px;text-align:center;pointer-events:none;background:linear-gradient(to bottom, rgba(245,237,225,.85), transparent);opacity:0;transition:opacity .8s ease .4s;}
 .ui-top.show{opacity:1;}
 .ui-eyebrow{font-size:9px;letter-spacing:.5em;text-transform:uppercase;color:rgba(58,36,24,.55);padding-left:.5em;margin-bottom:6px;}
@@ -95,7 +92,6 @@ canvas{display:block;position:fixed;inset:0;touch-action:none;}
 .ui-names em{color:#d4a860;font-family:var(--font-soft);font-style:italic;margin:0 4px;font-size:.9em;}
 .ui-date{font-size:9px;letter-spacing:.4em;text-transform:uppercase;color:rgba(58,36,24,.5);padding-left:.4em;margin-top:5px;}
 
-/* ── Нижняя панель ── */
 .ui-bottom{position:fixed;bottom:0;left:0;right:0;z-index:10;padding:40px 20px 22px;text-align:center;pointer-events:none;background:linear-gradient(to top, rgba(245,237,225,.9), transparent);opacity:0;transition:opacity .8s ease .4s;}
 .ui-bottom.show{opacity:1;}
 .ui-hint{font-family:var(--font-soft);font-size:22px;color:rgba(58,36,24,.72);margin-bottom:10px;}
@@ -107,14 +103,12 @@ canvas{display:block;position:fixed;inset:0;touch-action:none;}
 .ui-counter{margin-top:8px;font-family:var(--font-title);font-style:italic;font-size:13px;letter-spacing:.22em;color:rgba(58,36,24,.6);}
 .ui-counter .num{color:var(--gold-deep);font-family:var(--font-script);font-style:normal;font-size:22px;letter-spacing:0;vertical-align:-3px;margin:0 2px;}
 
-/* ── Кнопка звука ── */
 .mute-btn{position:fixed;top:14px;right:14px;z-index:40;width:42px;height:42px;display:grid;place-items:center;background:rgba(252,247,238,.85);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);border:1px solid rgba(200,162,74,.5);border-radius:50%;box-shadow:0 4px 14px rgba(120,90,40,.15);transition:all .25s;opacity:0;pointer-events:none;}
 .mute-btn.show{opacity:1;pointer-events:auto;}
 .mute-btn svg{width:20px;height:20px;stroke:var(--ink);fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;}
 .mute-btn.muted .sound-on{display:none;}
 .mute-btn:not(.muted) .sound-off{display:none;}
 
-/* ── Подсказка ── */
 .tip{position:fixed;top:50%;left:50%;z-index:20;transform:translate(-50%,-50%);padding:16px 28px;background:rgba(252,247,238,.92);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);border:1px solid rgba(200,162,74,.45);border-radius:50px;font-family:var(--font-soft);font-size:26px;color:var(--ink);white-space:nowrap;pointer-events:none;opacity:0;display:flex;align-items:center;gap:12px;}
 .tip.show{animation:tipShow 3.2s ease forwards;}
 .tip-cursor{width:22px;height:22px;flex:0 0 auto;border-radius:50%;border:2px solid var(--gold-deep);position:relative;animation:tipPulse 1.4s ease-in-out infinite;}
@@ -122,7 +116,6 @@ canvas{display:block;position:fixed;inset:0;touch-action:none;}
 @keyframes tipPulse{0%,100%{transform:scale(1);opacity:.85;}50%{transform:scale(1.25);opacity:1;}}
 @keyframes tipShow{0%{opacity:0;transform:translate(-50%,-40%);}12%,78%{opacity:1;transform:translate(-50%,-50%);}100%{opacity:0;transform:translate(-50%,-55%);}}
 
-/* ── Просмотрщик ── */
 .viewer{position:fixed;inset:0;z-index:200;display:flex;align-items:center;justify-content:center;padding:64px 16px 40px;background:rgba(245,237,225,.96);-webkit-backdrop-filter:blur(18px);backdrop-filter:blur(18px);opacity:0;pointer-events:none;transition:opacity .35s ease;}
 .viewer.show{opacity:1;pointer-events:auto;}
 .viewer-fig{display:flex;flex-direction:column;align-items:center;gap:18px;max-width:100%;max-height:100%;opacity:0;transform:scale(.95);transition:opacity .4s,transform .5s cubic-bezier(.2,.9,.3,1);}
@@ -140,7 +133,6 @@ canvas{display:block;position:fixed;inset:0;touch-action:none;}
 .viewer-nav.prev{left:10px;}
 .viewer-nav.next{right:10px;}
 
-/* ── Финал ── */
 .finale{position:fixed;inset:0;z-index:150;background:radial-gradient(ellipse at 50% 42%, rgba(34,22,12,.96) 0%, rgba(8,5,3,.995) 78%);opacity:0;pointer-events:none;transition:opacity 1.4s ease;overflow:hidden;cursor:pointer;}
 .finale.show{opacity:1;pointer-events:auto;}
 .finale-inner{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:60px 24px 80px;text-align:center;opacity:1;transition:opacity .42s ease;overflow-y:auto;-webkit-overflow-scrolling:touch;}
@@ -166,7 +158,6 @@ canvas{display:block;position:fixed;inset:0;touch-action:none;}
 .finale-dot{width:6px;height:6px;border-radius:50%;background:rgba(232,210,166,.22);transition:background .35s, transform .35s;}
 .finale-dot.active{background:#e0b866;transform:scale(1.35);}
 
-/* ── Пасхалка ── */
 .easter-egg{position:fixed;inset:0;z-index:250;display:flex;align-items:center;justify-content:center;background:rgba(20,12,6,.92);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);opacity:0;pointer-events:none;transition:opacity .6s ease;padding:32px 24px;}
 .easter-egg.show{opacity:1;pointer-events:auto;}
 .easter-inner{max-width:560px;width:100%;padding:48px 40px 36px;text-align:center;background:linear-gradient(160deg,#fdf8ec,#f2e4c8);border-radius:6px;box-shadow:0 30px 80px rgba(0,0,0,.75),0 0 0 1px rgba(200,162,74,.5),0 0 0 9px rgba(40,26,14,.4);position:relative;}
@@ -177,7 +168,6 @@ canvas{display:block;position:fixed;inset:0;touch-action:none;}
 .easter-text{font-family:var(--font-title);font-style:italic;font-size:clamp(17px,3.5vw,20px);line-height:1.55;color:#3a2418;margin-bottom:26px;}
 .easter-text em{color:#a8801f;font-style:italic;font-weight:500;}
 
-/* ── Адаптив ── */
 @media (max-width:600px){
   .door-arch-wrap{width:94vw;height:74vh;}.door{width:68vw;height:52vh;}
   .hanging-vine{width:80px;}.hanging-vine.left{left:0;}.hanging-vine.right{right:0;}
@@ -1380,8 +1370,8 @@ els.easterEgg.addEventListener('click', (e) => { if (e.target === els.easterEgg)
 
 /* ═══════════════════════════════════════════════════════════
    Предзагрузка: 36 фото + 2 финальных + музыка = 39.
-   Таймаут 30 сек на картинку. При ошибках — кнопки
-   «Ждать ещё» / «Войти всё равно».
+   Ограничение параллелизма — 4 файла за раз.
+   Таймаут 90 сек на картинку, 60 сек на музыку.
    ═══════════════════════════════════════════════════════════ */
 const preloadState = { total: 0, ok: 0, errors: [], done: false, allowEnter: false };
 let preloadedAudio = null;
@@ -1432,7 +1422,7 @@ function addImage(src, isRetry = false){
     };
     img.addEventListener('load', () => done(true), { once: true });
     img.addEventListener('error', () => done(false), { once: true });
-    setTimeout(() => done(false), 30000);
+    setTimeout(() => done(false), 90000);
     img.src = src;
   });
 }
@@ -1464,10 +1454,27 @@ function addAudio(src, isRetry = false){
     a.addEventListener('canplay', () => done(true), { once: true });
     a.addEventListener('loadeddata', () => done(true), { once: true });
     a.addEventListener('error', () => done(false), { once: true });
-    setTimeout(() => done(false), 20000);
+    setTimeout(() => done(false), 60000);
     a.src = src;
     a.load();
   });
+}
+
+/* Ограничитель параллелизма: не больше N одновременных задач */
+async function runWithLimit(items, limit, fn){
+  let cursor = 0;
+  const workers = [];
+  const n = Math.min(limit, items.length);
+  for (let w = 0; w < n; w++){
+    workers.push((async () => {
+      while (true) {
+        const idx = cursor++;
+        if (idx >= items.length) return;
+        try { await fn(items[idx]); } catch(_){}
+      }
+    })());
+  }
+  await Promise.all(workers);
 }
 
 async function runPreload(){
@@ -1476,13 +1483,22 @@ async function runPreload(){
   preloadState.errors.length = 0;
   failedItems.length = 0;
 
-  const tasks = [];
-  PHOTOS.forEach(p => tasks.push(addImage(p.src)));
-  FINALE_IMAGES.forEach(src => tasks.push(addImage(src)));
-  tasks.push(addAudio(MUSIC_FILE));
+  /* Считаем total вручную — здесь, до запуска */
+  const imageTasks = PHOTOS.map(p => ({ type: 'image', src: p.src }));
+  FINALE_IMAGES.forEach(src => imageTasks.push({ type: 'image', src }));
+  const audioTask = { type: 'audio', src: MUSIC_FILE };
+  preloadState.total = imageTasks.length + 1;
 
   updateLoaderProgress();
-  await Promise.all(tasks);
+
+  /* Картинки — по 4 за раз */
+  await runWithLimit(imageTasks, 4, async (item) => {
+    await addImage(item.src, true);
+  });
+
+  /* Музыка — в самом конце, отдельно */
+  await addAudio(audioTask.src, true);
+
   preloadState.done = true;
 
   if (preloadState.errors.length === 0){
@@ -1509,16 +1525,15 @@ async function retryFailed(){
   els.loaderHint.textContent = `Повторная попытка: 0 из ${retryTotal}`;
   els.loaderProgressFill.style.width = '0%';
 
-  const tasks = failedItems.map(item => {
-    const p = item.type === 'image' ? addImage(item.src, true) : addAudio(item.src, true);
-    return p.then(() => {
-      retryDone++;
-      const pct = Math.round((retryDone / retryTotal) * 100);
-      els.loaderHint.textContent = `Повторная попытка: ${retryDone} из ${retryTotal}`;
-      els.loaderProgressFill.style.width = pct + '%';
-    });
+  const snapshot = failedItems.slice();
+  await runWithLimit(snapshot, 4, async (item) => {
+    if (item.type === 'image') await addImage(item.src, true);
+    else await addAudio(item.src, true);
+    retryDone++;
+    const pct = Math.round((retryDone / retryTotal) * 100);
+    els.loaderHint.textContent = `Повторная попытка: ${retryDone} из ${retryTotal}`;
+    els.loaderProgressFill.style.width = pct + '%';
   });
-  await Promise.all(tasks);
 
   if (failedItems.length === 0){
     els.loaderHint.textContent = 'Готово. Входите…';
@@ -1543,9 +1558,6 @@ function forceEnter(){
 loaderUi.retryBtn.addEventListener('click', retryFailed);
 loaderUi.enterBtn.addEventListener('click', forceEnter);
 
-/* ═══════════════════════════════════════════════════════════
-   Музыка: громкость 0.1, файл music.mp3
-   ═══════════════════════════════════════════════════════════ */
 let audioEl = null;
 let audioMuted = false;
 let audioStarted = false;
