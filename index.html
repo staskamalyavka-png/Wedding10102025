@@ -1357,99 +1357,86 @@ els.easterClose.addEventListener('click', () => els.easterEgg.classList.remove('
 els.easterEgg.addEventListener('click', (e) => { if (e.target === els.easterEgg) els.easterEgg.classList.remove('show'); });
 
 /* ═══════════════════════════════════════════════════════════
-   Звук: потрескивание свечей + романтичное пианино
+   Звук: только потрескивание свечей (без музыки, без шипения)
    ═══════════════════════════════════════════════════════════ */
 let audioCtx = null;
-let musicGain = null;
-let musicTimer = null;
 let crackleGain = null;
 let crackleTimeout = null;
 let audioMuted = false;
 
-async function startRomanticMusic(){
-  if (!audioCtx || musicGain) return;
-  if (audioCtx.state === 'suspended'){ try { await audioCtx.resume(); } catch(_){} }
-
-  musicGain = audioCtx.createGain();
-  musicGain.gain.value = 0;
-  musicGain.gain.setTargetAtTime(0.18, audioCtx.currentTime, 2.5);
-  musicGain.connect(audioCtx.destination);
-
-  const chords = [
-    [261.63, 329.63, 392.00, 523.25],
-    [196.00, 246.94, 293.66, 392.00],
-    [220.00, 261.63, 329.63, 440.00],
-    [174.61, 220.00, 261.63, 349.23]
-  ];
-  const beat = 0.72;
-  const chordDur = beat * 4;
-  let nextTime = audioCtx.currentTime + 0.5;
-
-  function playNote(freq, time, dur, gainMul){
-    if (!musicGain) return;
-    const osc = audioCtx.createOscillator();
-    osc.type = 'triangle';
-    osc.frequency.value = freq;
-    const g = audioCtx.createGain();
-    g.gain.setValueAtTime(0, time);
-    g.gain.linearRampToValueAtTime(0.32 * gainMul, time + 0.09);
-    g.gain.exponentialRampToValueAtTime(0.0015, time + dur);
-    osc.connect(g); g.connect(musicGain);
-    osc.start(time); osc.stop(time + dur + 0.15);
-  }
-
-  function schedule(){
-    while (nextTime < audioCtx.currentTime + 6){
-      const chord = chords[Math.floor(Math.random() * chords.length)];
-      playNote(chord[0], nextTime, chordDur * 0.9, 0.7);
-      const pattern = [0, 1, 2, 3, 2, 1, 2, 3];
-      pattern.forEach((idx, i) => {
-        const oct = (i >= 4) ? 2 : 1;
-        playNote(chord[idx] * oct, nextTime + i * (chordDur / 8), beat * 1.6, 0.5);
-      });
-      nextTime += chordDur;
-    }
-  }
-  schedule();
-  musicTimer = setInterval(schedule, 3000);
-}
-
-/* Один "щелчок" свечи — короткий шумовой импульс, отфильтрованный полосовым фильтром */
-function playCrackle(when, gainMul){
+/* Один "щелчок" — короткий шумовой всплеск с мягкой атакой
+   и экспоненциальным спадом. Пропускается через highpass+lowpass
+   (широкая полоса вместо узкого резонанса — нет "8-битности").
+   weight — общая громкость (1 = обычный, 1.4 = громкий "поп"). */
+function playCrackle(when, weight){
   if (!audioCtx || !crackleGain) return;
-  const dur = 0.006 + Math.random() * 0.024;
-  const frames = Math.max(4, Math.ceil(audioCtx.sampleRate * dur));
+
+  let dur, tau, hpF, lpF;
+  const r = Math.random();
+  if (r < 0.40){
+    // очень мелкие "искры" — быстрое шипение
+    dur = 0.0015 + Math.random() * 0.0030;
+    tau = 0.0020 + Math.random() * 0.0035;
+    hpF = 900 + Math.random() * 900;
+    lpF = 5500 + Math.random() * 3000;
+  } else if (r < 0.75){
+    // обычные короткие щелчки
+    dur = 0.005 + Math.random() * 0.014;
+    tau = 0.007 + Math.random() * 0.010;
+    hpF = 320 + Math.random() * 220;
+    lpF = 4200 + Math.random() * 3000;
+  } else if (r < 0.95){
+    // более длинные средние трески
+    dur = 0.024 + Math.random() * 0.032;
+    tau = 0.016 + Math.random() * 0.016;
+    hpF = 220 + Math.random() * 180;
+    lpF = 3200 + Math.random() * 2400;
+  } else {
+    // редкие "попы" — глубокие, длинные
+    dur = 0.060 + Math.random() * 0.080;
+    tau = 0.028 + Math.random() * 0.032;
+    hpF = 150 + Math.random() * 140;
+    lpF = 2500 + Math.random() * 2000;
+  }
+
+  const frames = Math.max(8, Math.ceil(audioCtx.sampleRate * dur));
   const buf = audioCtx.createBuffer(1, frames, audioCtx.sampleRate);
   const d = buf.getChannelData(0);
+  const attackFrames = Math.max(1, Math.floor(audioCtx.sampleRate * 0.0008));
+  const decay = audioCtx.sampleRate * tau;
   for (let i = 0; i < frames; i++){
-    const env = Math.pow(1 - i / frames, 2.5);
+    let env;
+    if (i < attackFrames) env = i / attackFrames;
+    else env = Math.exp(-(i - attackFrames) / decay);
     d[i] = (Math.random() * 2 - 1) * env;
   }
+
   const src = audioCtx.createBufferSource();
   src.buffer = buf;
-  const filt = audioCtx.createBiquadFilter();
-  filt.type = 'bandpass';
-  filt.frequency.value = 1400 + Math.random() * 2800;
-  filt.Q.value = 1.4;
+  const hp = audioCtx.createBiquadFilter();
+  hp.type = 'highpass'; hp.frequency.value = hpF; hp.Q.value = 0.7;
+  const lp = audioCtx.createBiquadFilter();
+  lp.type = 'lowpass'; lp.frequency.value = lpF; lp.Q.value = 0.7;
   const g = audioCtx.createGain();
-  g.gain.value = (0.05 + Math.random() * 0.13) * gainMul;
-  src.connect(filt); filt.connect(g); g.connect(crackleGain);
+  g.gain.value = (0.05 + Math.random() * 0.09) * weight;
+  src.connect(hp); hp.connect(lp); lp.connect(g); g.connect(crackleGain);
   src.start(when);
 }
 
 function crackleLoop(){
   if (!audioCtx || !crackleGain) return;
-  const gap = 70 + Math.random() * 260;
+  const r = Math.random();
+  let gap;
+  if (r < 0.55) gap = 45 + Math.random() * 130;
+  else if (r < 0.88) gap = 180 + Math.random() * 380;
+  else gap = 600 + Math.random() * 1400;
+
   crackleTimeout = setTimeout(() => {
     if (!audioCtx || !crackleGain) return;
-    const now = audioCtx.currentTime;
+    const now = audioCtx.currentTime + 0.005;
     playCrackle(now, 1);
-    if (Math.random() < 0.28){
-      playCrackle(now + 0.025 + Math.random() * 0.06, 0.7);
-    }
-    if (Math.random() < 0.06){
-      playCrackle(now + 0.10 + Math.random() * 0.05, 1.4);
-    }
+    if (Math.random() < 0.30) playCrackle(now + 0.020 + Math.random() * 0.050, 0.65);
+    if (Math.random() < 0.08) playCrackle(now + 0.075 + Math.random() * 0.060, 1.3);
     crackleLoop();
   }, gap);
 }
@@ -1462,24 +1449,11 @@ async function createAmbientSound(){
     if (audioCtx.state === 'suspended'){
       try { await audioCtx.resume(); } catch(_){}
     }
-
-    // Очень тихий тёплый гул — "тепло от свечей"
-    const hum = audioCtx.createOscillator();
-    hum.type = 'sine';
-    hum.frequency.value = 180;
-    const humGain = audioCtx.createGain();
-    humGain.gain.value = 0.012;
-    hum.connect(humGain).connect(audioCtx.destination);
-    hum.start();
-
-    // Канал потрескиваний
     crackleGain = audioCtx.createGain();
     crackleGain.gain.value = 0;
-    crackleGain.gain.setTargetAtTime(0.9, audioCtx.currentTime, 1.5);
+    crackleGain.gain.setTargetAtTime(0.8, audioCtx.currentTime, 1.2);
     crackleGain.connect(audioCtx.destination);
     crackleLoop();
-
-    startRomanticMusic();
   } catch(_){}
 }
 
@@ -1487,8 +1461,7 @@ function toggleMute(){
   if (!audioCtx) return;
   audioMuted = !audioMuted;
   els.muteBtn.classList.toggle('muted', audioMuted);
-  if (musicGain) musicGain.gain.setTargetAtTime(audioMuted ? 0 : 0.18, audioCtx.currentTime, 0.4);
-  if (crackleGain) crackleGain.gain.setTargetAtTime(audioMuted ? 0 : 0.9, audioCtx.currentTime, 0.3);
+  if (crackleGain) crackleGain.gain.setTargetAtTime(audioMuted ? 0 : 0.8, audioCtx.currentTime, 0.3);
 }
 els.muteBtn.addEventListener('click', (e) => {
   e.stopPropagation();
@@ -1512,4 +1485,131 @@ function animate(){
   if (now - lastInteraction > 2000){
     if (idleStart === 0) idleStart = now;
     const idleT = (now - idleStart) * 0.001;
-    idleX = Math.sin(idleT * 0
+    idleX = Math.sin(idleT * 0.25) * 0.02;
+    idleY = Math.sin(idleT * 0.4) * 0.008;
+  } else { idleStart = 0; }
+  camera.rotation.y = yaw + idleX;
+  camera.rotation.x = pitch + idleY;
+  camera.position.y = -ROOM.H / 2 + ROOM.EYE + Math.sin(t * 0.5) * 1.2;
+  camera.position.x = Math.sin(t * 0.35) * 1.0;
+
+  realLights.forEach(({ light, base, phase }) => { light.intensity = base + Math.sin(t * 1.4 + phase) * 0.04; });
+  beamMeshes.forEach((beam, i) => { beam.material.opacity = 0.24 + Math.sin(t * 0.6 + i * 1.1) * 0.06; });
+
+  vineActivity += (vineActivityTarget - vineActivity) * 0.03;
+  vineFlowers.forEach(({ mesh, phase }) => { const k = 1 + Math.sin(t * 0.7 + phase) * 0.06 * vineActivity; mesh.scale.set(k, k, 1); });
+  vineBulbs.forEach(({ mesh, phase }) => { const k = 1 + Math.sin(t * 2.2 + phase) * 0.25 * vineActivity; mesh.scale.set(k, k, k); });
+
+  raycaster.setFromCamera(pointer, camera);
+  const hits = raycaster.intersectObjects(photoMeshes, false);
+  const newHover = hits.length > 0 ? hits[0].object : null;
+  photoMeshes.forEach(m => {
+    const target = (m === newHover) ? 1.08 : 1;
+    m.scale.x += (target - m.scale.x) * 0.2;
+    m.scale.y += (target - m.scale.y) * 0.2;
+  });
+  document.body.style.cursor = newHover ? 'pointer' : 'default';
+
+  if (composer) composer.render();
+  else renderer.render(scene, camera);
+  requestAnimationFrame(animate);
+}
+
+window.addEventListener('resize', () => {
+  camera.aspect = window.innerWidth / window.innerHeight;
+  camera.fov = (window.innerWidth < 700) ? 92 : 78;
+  camera.updateProjectionMatrix();
+  renderer.setSize(window.innerWidth, window.innerHeight);
+  if (composer) composer.setSize(window.innerWidth, window.innerHeight);
+});
+
+async function init(){
+  const safetyTimer = setTimeout(() => {
+    if (els.loader && !els.loader.classList.contains('hide')){
+      els.loader.classList.add('hide');
+      setTimeout(() => { els.loader.style.display = 'none'; }, 700);
+    }
+  }, 3000);
+
+  try {
+    if (document.fonts && document.fonts.load){
+      try {
+        await Promise.race([
+          Promise.all([
+            document.fonts.load('normal normal 320px "Pinyon Script"', 'M'),
+            document.fonts.load('normal normal 320px "Pinyon Script"', 'A'),
+            document.fonts.load('normal normal 400px "Parisienne"', 'M')
+          ]),
+          new Promise(r => setTimeout(r, 900))
+        ]);
+      } catch(_){}
+    }
+  } catch(_){}
+
+  buildRoom(); buildWallPanels(); buildDrapery(); buildRunner();
+  buildColumns(); buildArches(); buildMonogram(); buildLights(); buildLamps();
+  buildCandles(); buildHangingVines(); buildFloorDecor(); buildPhotos();
+
+  if (QUALITY.bloom && EffectComposer && RenderPass && UnrealBloomPass){
+    try {
+      composer = new EffectComposer(renderer);
+      composer.addPass(new RenderPass(scene, camera));
+      composer.addPass(new UnrealBloomPass(new THREE.Vector2(window.innerWidth, window.innerHeight), 0.12, 0.5, 0.85));
+    } catch(_){ composer = null; }
+  }
+  if (QUALITY.envMap && RoomEnvironment){
+    try {
+      const pmrem = new THREE.PMREMGenerator(renderer);
+      pmrem.compileEquirectangularShader();
+      scene.environment = pmrem.fromScene(new RoomEnvironment(), 0.04).texture;
+      pmrem.dispose();
+    } catch(_){}
+  }
+
+  updateCounter();
+  clearTimeout(safetyTimer);
+  window.setTimeout(() => {
+    els.loader.classList.add('hide');
+    window.setTimeout(() => { els.loader.style.display = 'none'; }, 700);
+  }, 1600);
+}
+init().catch(e => {
+  console.error('init() failed:', e);
+  if (els.loader){ els.loader.classList.add('hide'); setTimeout(() => { els.loader.style.display = 'none'; }, 700); }
+});
+
+PHOTOS.forEach(p => { const i = new Image(); i.src = p.src; });
+['daughter.png', 'family.jpg'].forEach(src => { const i = new Image(); i.src = src; });
+
+let doorOpened = false;
+function openDoor(){
+  if (doorOpened) return;
+  doorOpened = true;
+  els.doorScreen.classList.add('opening');
+  window.setTimeout(() => {
+    renderer.domElement.style.opacity = '1';
+    running = true;
+    clock.start();
+    animate();
+    els.uiTop.classList.add('show');
+    els.uiBottom.classList.add('show');
+    els.tip.classList.add('show');
+    window.setTimeout(() => els.tip.classList.remove('show'), 3400);
+    els.muteBtn.classList.add('show');
+  }, 600);
+  window.setTimeout(() => { els.doorScreen.style.display = 'none'; }, 1500);
+  window.setTimeout(() => {
+    targetYaw = 0.35; lastInteraction = performance.now();
+    window.setTimeout(() => { targetYaw = 0; lastInteraction = performance.now(); }, 2200);
+  }, 1800);
+
+  if (!audioCtx){
+    createAmbientSound();
+  } else if (audioCtx.state === 'suspended'){
+    audioCtx.resume().catch(()=>{});
+  }
+}
+els.doorScreen.addEventListener('click', openDoor);
+</script>
+</body>
+</html>
