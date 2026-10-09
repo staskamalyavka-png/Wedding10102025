@@ -28,6 +28,7 @@ html,body{
 button{font-family:inherit;border:0;background:transparent;cursor:pointer;color:inherit;-webkit-tap-highlight-color:transparent;}
 canvas{display:block;position:fixed;inset:0;touch-action:none;}
 
+/* ── Загрузчик ── */
 .loader{position:fixed;inset:0;z-index:9999;display:flex;align-items:center;justify-content:center;background:radial-gradient(circle at 50% 40%, #faf3e6 0%, #e8dcc6 100%);transition:opacity .7s,visibility .7s;}
 .loader.hide{opacity:0;visibility:hidden;pointer-events:none;}
 .loader-inner{text-align:center;padding:0 24px;max-width:640px;}
@@ -39,6 +40,7 @@ canvas{display:block;position:fixed;inset:0;touch-action:none;}
 @keyframes fu{from{opacity:0;transform:translateY(12px);}to{opacity:1;transform:none;}}
 @keyframes gl{from{width:0;}to{width:min(320px,62vw);}}
 
+/* ── Дверь ── */
 .door-screen{position:fixed;inset:0;z-index:100;display:flex;align-items:center;justify-content:center;overflow:hidden;background:radial-gradient(ellipse 80% 60% at 50% 45%, #faf3e6 0%, #ecdfc4 55%, #d9c8a8 100%);transition:opacity 1s ease, transform 1s ease;}
 .door-screen.opening{opacity:0;transform:scale(1.05);pointer-events:none;}
 .door-titles{position:absolute;top:5%;left:0;right:0;text-align:center;z-index:5;pointer-events:none;}
@@ -76,13 +78,20 @@ canvas{display:block;position:fixed;inset:0;touch-action:none;}
 .door-hint .key{display:inline-block;color:var(--gold-deep);margin:0 8px;font-size:20px;font-family:var(--font-hand);}
 @keyframes hintPulse{0%,100%{opacity:.55;}50%{opacity:1;}}
 
+/* ── Верхняя панель ── */
 .ui-top{position:fixed;top:0;left:0;right:0;z-index:10;padding:20px 24px 40px;text-align:center;pointer-events:none;background:linear-gradient(to bottom, rgba(245,237,225,.85), transparent);opacity:0;transition:opacity .8s ease .4s;}
 .ui-top.show{opacity:1;}
 .ui-eyebrow{font-size:9px;letter-spacing:.5em;text-transform:uppercase;color:rgba(58,36,24,.55);padding-left:.5em;margin-bottom:6px;}
-.ui-names{font-family:var(--font-script);font-weight:400;font-size:clamp(28px,6vw,42px);line-height:1;color:var(--ink);pointer-events:auto;cursor:pointer;display:inline-block;padding:6px 14px;}
+.ui-names{
+  font-family:var(--font-script);font-weight:400;
+  font-size:clamp(28px,6vw,42px);line-height:1;color:var(--ink);
+  pointer-events:auto;cursor:pointer;
+  display:inline-block;padding:6px 14px;
+}
 .ui-names em{color:#d4a860;font-family:var(--font-soft);font-style:italic;margin:0 4px;font-size:.9em;}
 .ui-date{font-size:9px;letter-spacing:.4em;text-transform:uppercase;color:rgba(58,36,24,.5);padding-left:.4em;margin-top:5px;}
 
+/* ── Нижняя панель ── */
 .ui-bottom{position:fixed;bottom:0;left:0;right:0;z-index:10;padding:40px 20px 22px;text-align:center;pointer-events:none;background:linear-gradient(to top, rgba(245,237,225,.9), transparent);opacity:0;transition:opacity .8s ease .4s;}
 .ui-bottom.show{opacity:1;}
 .ui-hint{font-family:var(--font-soft);font-size:22px;color:rgba(58,36,24,.72);margin-bottom:10px;}
@@ -94,12 +103,14 @@ canvas{display:block;position:fixed;inset:0;touch-action:none;}
 .ui-counter{margin-top:8px;font-family:var(--font-title);font-style:italic;font-size:13px;letter-spacing:.22em;color:rgba(58,36,24,.6);}
 .ui-counter .num{color:var(--gold-deep);font-family:var(--font-script);font-style:normal;font-size:22px;letter-spacing:0;vertical-align:-3px;margin:0 2px;}
 
+/* ── Кнопка звука ── */
 .mute-btn{position:fixed;top:14px;right:14px;z-index:40;width:42px;height:42px;display:grid;place-items:center;background:rgba(252,247,238,.85);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);border:1px solid rgba(200,162,74,.5);border-radius:50%;box-shadow:0 4px 14px rgba(120,90,40,.15);transition:all .25s;opacity:0;pointer-events:none;}
 .mute-btn.show{opacity:1;pointer-events:auto;}
 .mute-btn svg{width:20px;height:20px;stroke:var(--ink);fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;}
 .mute-btn.muted .sound-on{display:none;}
 .mute-btn:not(.muted) .sound-off{display:none;}
 
+/* ── Подсказка-тип ── */
 .tip{position:fixed;top:50%;left:50%;z-index:20;transform:translate(-50%,-50%);padding:16px 28px;background:rgba(252,247,238,.92);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);border:1px solid rgba(200,162,74,.45);border-radius:50px;font-family:var(--font-soft);font-size:26px;color:var(--ink);white-space:nowrap;pointer-events:none;opacity:0;display:flex;align-items:center;gap:12px;}
 .tip.show{animation:tipShow 3.2s ease forwards;}
 .tip-cursor{width:22px;height:22px;flex:0 0 auto;border-radius:50%;border:2px solid var(--gold-deep);position:relative;animation:tipPulse 1.4s ease-in-out infinite;}
@@ -107,11 +118,12 @@ canvas{display:block;position:fixed;inset:0;touch-action:none;}
 @keyframes tipPulse{0%,100%{transform:scale(1);opacity:.85;}50%{transform:scale(1.25);opacity:1;}}
 @keyframes tipShow{0%{opacity:0;transform:translate(-50%,-40%);}12%,78%{opacity:1;transform:translate(-50%,-50%);}100%{opacity:0;transform:translate(-50%,-55%);}}
 
+/* ── Просмотрщик фото ── */
 .viewer{position:fixed;inset:0;z-index:200;display:flex;align-items:center;justify-content:center;padding:64px 16px 40px;background:rgba(245,237,225,.96);-webkit-backdrop-filter:blur(18px);backdrop-filter:blur(18px);opacity:0;pointer-events:none;transition:opacity .35s ease;}
 .viewer.show{opacity:1;pointer-events:auto;}
 .viewer-fig{display:flex;flex-direction:column;align-items:center;gap:18px;max-width:100%;max-height:100%;opacity:0;transform:scale(.95);transition:opacity .4s,transform .5s cubic-bezier(.2,.9,.3,1);}
 .viewer.show .viewer-fig{opacity:1;transform:none;}
-.viewer-img{max-width:min(92vw,1000px);max-height:66vh;max-height:66dvh;width:auto;height:auto;object-fit:contain;background:#efe4d0;box-shadow:0 24px 60px rgba(120,90,40,.35),0 0 0 1px rgba(200,162,74,.5),0 0 0 7px #fcf7ee,0 0 0 8px rgba(200,162,74,.35);display:block;}
+.viewer-img{max-width:min(92vw,1000px);max-height:66vh;max-height:66dvh;width:auto;height:auto;object-fit:contain;background:#efe4d0;box-shadow:0 24px 60px rgba(120,90,40,.35),0 0 0 1px rgba(200,162,74,.5),0 0 0 7px #fcf7ee,0 0 0 8px rgba(200,162,74,.35);display:block;transition:opacity .35s ease;}
 .viewer-placeholder{width:min(92vw,720px);aspect-ratio:4/3;background:linear-gradient(150deg,#fcecdf 0%,#f8d8c8 100%);border:1px solid rgba(200,162,74,.5);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;color:#6b3418;box-shadow:0 24px 60px rgba(120,90,40,.35),0 0 0 7px #fcf7ee,0 0 0 8px rgba(200,162,74,.35);padding:24px;text-align:center;}
 .viewer-placeholder svg{width:52px;height:52px;opacity:.6;}
 .viewer-placeholder .ph-title{font-family:var(--font-soft);font-size:30px;}
@@ -124,20 +136,43 @@ canvas{display:block;position:fixed;inset:0;touch-action:none;}
 .viewer-nav.prev{left:10px;}
 .viewer-nav.next{right:10px;}
 
+/* ── Финал ── */
 .finale{position:fixed;inset:0;z-index:150;background:radial-gradient(ellipse at 50% 42%, rgba(34,22,12,.96) 0%, rgba(8,5,3,.995) 78%);opacity:0;pointer-events:none;transition:opacity 1.4s ease;overflow:hidden;cursor:pointer;}
 .finale.show{opacity:1;pointer-events:auto;}
-.finale-inner{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:60px 24px 80px;text-align:center;opacity:1;transition:opacity .42s ease;}
+.finale-inner{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:60px 24px 80px;text-align:center;opacity:1;transition:opacity .42s ease;overflow-y:auto;-webkit-overflow-scrolling:touch;}
 .finale-inner.fade{opacity:0;}
 .finale-text{font-family:var(--font-soft);font-size:clamp(28px,6.5vw,50px);line-height:1.3;color:#f7e4c4;text-shadow:0 2px 30px rgba(255,180,90,.28);max-width:780px;opacity:0;transform:translateY(16px);animation:finaleTextIn 1.05s cubic-bezier(.2,.8,.3,1) forwards;}
 .finale-text.gold{color:#ffd9a0;font-size:clamp(26px,6vw,44px);margin-top:22px;}
 .finale-text.small{font-family:var(--font-soft);font-size:clamp(22px,5vw,30px);margin-top:22px;color:#f7e4c4;line-height:1.3;}
 @keyframes finaleTextIn{to{opacity:1;transform:none;}}
-.finale-photo-wrap{position:relative;margin:0 auto 30px;border-radius:6px;overflow:hidden;background:linear-gradient(160deg,#2a1a10 0%,#4a2a18 100%);box-shadow:0 28px 90px rgba(0,0,0,.7),0 0 0 1px rgba(200,162,74,.5),0 0 0 8px rgba(28,16,8,.75),0 0 70px rgba(255,190,110,.14);opacity:0;transform:scale(.94) translateY(14px);animation:finalePhotoIn 1.25s cubic-bezier(.2,.8,.3,1) .08s forwards;max-width:92vw;max-height:58vh;max-height:58dvh;}
+.finale-photo-wrap{
+  position:relative;
+  max-width:min(480px,86vw);
+  margin:0 0 30px;
+  padding:16px;
+  background:linear-gradient(160deg,#fcf7ee 0%,#ecdfc4 100%);
+  border-radius:3px;
+  box-shadow:
+    0 28px 90px rgba(0,0,0,.7),
+    0 0 0 1px rgba(200,162,74,.9),
+    0 0 0 3px rgba(138,106,31,.7),
+    0 0 0 4px rgba(200,162,74,.55),
+    0 0 80px rgba(255,190,110,.28);
+  opacity:0;transform:scale(.94) translateY(14px);animation:finalePhotoIn 1.25s cubic-bezier(.2,.8,.3,1) .08s forwards;
+}
+.finale-photo-wrap::before{
+  content:'';position:absolute;inset:8px;border:1px solid rgba(200,162,74,.4);border-radius:1px;pointer-events:none;z-index:2;
+}
 @keyframes finalePhotoIn{to{opacity:1;transform:none;}}
-.finale-photo{width:100%;height:100%;object-fit:contain;display:block;}
-.finale-photo-ph{position:absolute;inset:0;display:none;flex-direction:column;align-items:center;justify-content:center;gap:14px;padding:22px;text-align:center;color:rgba(247,228,196,.72);min-width:200px;min-height:150px;}
-.finale-photo-ph svg{width:64px;height:64px;opacity:.55;}
-.finale-photo-ph p{font-family:var(--font-soft);font-size:22px;letter-spacing:.04em;opacity:.72;}
+.finale-photo{max-width:100%;max-height:44vh;width:auto;height:auto;display:block;margin:0 auto;object-fit:contain;background:#efe4d0;box-shadow:0 0 0 1px rgba(200,162,74,.55);}
+.finale-photo-ph{
+  position:relative;display:none;width:min(360px,72vw);aspect-ratio:4/3;
+  flex-direction:column;align-items:center;justify-content:center;gap:14px;padding:22px;text-align:center;
+  color:#6b3418;background:linear-gradient(150deg,#fcecdf 0%,#f8d8c8 100%);
+  box-shadow:0 0 0 1px rgba(200,162,74,.5);
+}
+.finale-photo-ph svg{width:56px;height:56px;opacity:.6;}
+.finale-photo-ph p{font-family:var(--font-soft);font-size:22px;letter-spacing:.04em;opacity:.7;}
 .finale-actions{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;margin-top:26px;opacity:0;animation:finaleTextIn 1s ease .55s forwards;}
 .btn{display:inline-block;padding:12px 28px;font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--ink);background:linear-gradient(180deg,#fcf7ee,#ecdfc4);border:1px solid rgba(200,162,74,.6);border-radius:26px;box-shadow:0 5px 15px rgba(120,90,40,.18);transition:all .25s;}
 .btn:hover{box-shadow:0 0 22px rgba(200,162,74,.45);}
@@ -148,9 +183,20 @@ canvas{display:block;position:fixed;inset:0;touch-action:none;}
 .finale-dot{width:6px;height:6px;border-radius:50%;background:rgba(232,210,166,.22);transition:background .35s, transform .35s;}
 .finale-dot.active{background:#e0b866;transform:scale(1.35);}
 
-.easter-egg{position:fixed;inset:0;z-index:250;display:flex;align-items:center;justify-content:center;background:rgba(20,12,6,.92);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);opacity:0;pointer-events:none;transition:opacity .6s ease;padding:32px 24px;}
+/* ── Пасхалка ── */
+.easter-egg{
+  position:fixed;inset:0;z-index:250;
+  display:flex;align-items:center;justify-content:center;
+  background:rgba(20,12,6,.92);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);
+  opacity:0;pointer-events:none;transition:opacity .6s ease;padding:32px 24px;
+}
 .easter-egg.show{opacity:1;pointer-events:auto;}
-.easter-inner{max-width:560px;width:100%;padding:48px 40px 36px;text-align:center;background:linear-gradient(160deg,#fdf8ec,#f2e4c8);border-radius:6px;box-shadow:0 30px 80px rgba(0,0,0,.75),0 0 0 1px rgba(200,162,74,.5),0 0 0 9px rgba(40,26,14,.4);position:relative;}
+.easter-inner{
+  max-width:560px;width:100%;padding:48px 40px 36px;text-align:center;
+  background:linear-gradient(160deg,#fdf8ec,#f2e4c8);border-radius:6px;
+  box-shadow:0 30px 80px rgba(0,0,0,.75),0 0 0 1px rgba(200,162,74,.5),0 0 0 9px rgba(40,26,14,.4);
+  position:relative;
+}
 .easter-inner::before{content:'';position:absolute;inset:14px;border:1px solid rgba(200,162,74,.35);border-radius:4px;pointer-events:none;}
 .easter-ornament{width:140px;height:16px;margin:0 auto 18px;}
 .easter-ornament svg{width:100%;height:100%;}
@@ -158,10 +204,12 @@ canvas{display:block;position:fixed;inset:0;touch-action:none;}
 .easter-text{font-family:var(--font-title);font-style:italic;font-size:clamp(17px,3.5vw,20px);line-height:1.55;color:#3a2418;margin-bottom:26px;}
 .easter-text em{color:#a8801f;font-style:italic;font-weight:500;}
 
+/* ── Адаптив ── */
 @media (max-width:600px){
   .door-arch-wrap{width:94vw;height:74vh;}.door{width:68vw;height:52vh;}
   .hanging-vine{width:80px;}.hanging-vine.left{left:0;}.hanging-vine.right{right:0;}
   .door-wreath{width:56px;height:56px;}
+  .finale-photo{max-height:38vh;}
 }
 @media (max-width:480px){
   .door-arch-wrap{width:94vw;height:72vh;}
@@ -173,6 +221,8 @@ canvas{display:block;position:fixed;inset:0;touch-action:none;}
   .ui-hint{font-size:20px;}
   .tip{font-size:20px;padding:12px 22px;}
   .mute-btn{width:38px;height:38px;top:10px;right:10px;}
+  .finale-photo-wrap{max-width:92vw;padding:12px;}
+  .finale-photo{max-height:34vh;}
   .door-names{font-size:clamp(38px,12vw,64px);}
   .ui-names{font-size:clamp(26px,7.5vw,34px);}
   .easter-inner{padding:36px 26px 28px;}
@@ -184,6 +234,7 @@ canvas{display:block;position:fixed;inset:0;touch-action:none;}
 </head>
 <body>
 
+<!-- Watchdog -->
 <script>
 (function(){
   var startTs = Date.now();
@@ -327,6 +378,10 @@ const QUALITY = {
 const COUPLE = { groom:'Максим', bride:'Анастасия', date:'10 · 10 · 2025' };
 const STORAGE_KEY = 'memory-room-opened-v3';
 
+/* ═══════════════════════════════════════════════════════════
+   36 ФОТО. Единый нейтральный знак — «Комната воспоминаний».
+   Файлы: photo1.jpg … photo36.jpg в одной папке с index.html
+   ═══════════════════════════════════════════════════════════ */
 const PHOTO_SIGN = 'Комната воспоминаний';
 const PHOTOS = [
   'photo1.jpg','photo2.jpg','photo3.jpg','photo4.jpg','photo5.jpg','photo6.jpg',
@@ -381,12 +436,13 @@ const scene = new THREE.Scene();
 scene.background = new THREE.Color(0xf2e8d6);
 scene.fog = new THREE.Fog(0xf2e8d6, 1400, 3200);
 
-const camera = new THREE.PerspectiveCamera(78, window.innerWidth / window.innerHeight, 1, 4000);
+const camera = new THREE.PerspectiveCamera(IS_MOBILE ? 92 : 78, window.innerWidth / window.innerHeight, 1, 4000);
 camera.position.set(0, -ROOM.H / 2 + ROOM.EYE, 0);
 camera.rotation.order = 'YXZ';
 
 let composer = null;
 
+/* ── Текстуры ── */
 function makeFlowerTex(){
   const S = 128; const c = document.createElement('canvas'); c.width = c.height = S;
   const ctx = c.getContext('2d'); ctx.clearRect(0, 0, S, S);
@@ -1014,26 +1070,6 @@ function makePhotoPlaceholderTex(w, h){
   const tex = new THREE.CanvasTexture(c); tex.colorSpace = THREE.SRGBColorSpace; return tex;
 }
 
-function fitTextureToFrame(t, texImage, frameW, frameH){
-  const imgW = texImage.width;
-  const imgH = texImage.height;
-  if (!imgW || !imgH) return;
-  const photoRatio = imgW / imgH;
-  const frameRatio = frameW / frameH;
-  if (photoRatio > frameRatio){
-    const newW = frameRatio / photoRatio;
-    t.repeat.set(newW, 1);
-    t.offset.set((1 - newW) / 2, 0);
-  } else {
-    const newH = photoRatio / frameRatio;
-    t.repeat.set(1, newH);
-    t.offset.set(0, (1 - newH) / 2);
-  }
-  t.wrapS = THREE.ClampToEdgeWrapping;
-  t.wrapT = THREE.ClampToEdgeWrapping;
-  t.needsUpdate = true;
-}
-
 function buildPhotos(){
   const { W, D } = ROOM;
   ARCS.forEach((arc, i) => { if (MAIN_PHOTOS[i]) placePhoto(MAIN_PHOTOS[i], arc.x, arc.y, arc.z, 0, arc.w, arc.h, true); });
@@ -1044,6 +1080,9 @@ function buildPhotos(){
   SIDE_SLOTS_FRONT.forEach(slot => { const p = nextPhoto(slot); if (p) placePhoto(p, -slot.z, slot.y, D/2 - 30, Math.PI, slot.w, slot.h); });
 }
 
+/* ═══════════════════════════════════════════════════════════
+   Рамка подстраивается под реальные пропорции фото после загрузки
+   ═══════════════════════════════════════════════════════════ */
 function placePhoto(photo, x, y, z, rotY, w, h, isMain = false){
   if (!photo) return;
   const dir = new THREE.Vector3(0, 0, 1).applyEuler(new THREE.Euler(0, rotY, 0));
@@ -1063,11 +1102,29 @@ function placePhoto(photo, x, y, z, rotY, w, h, isMain = false){
   scene.add(mesh);
   photoMeshes.push(mesh);
 
+  const slotW = w, slotH = h;
+
   texLoader.load(photo.src, (t) => {
     t.colorSpace = THREE.SRGBColorSpace;
-    fitTextureToFrame(t, t.image, w, h);
-    mesh.material.map = t;
-    mesh.material.needsUpdate = true;
+    mesh.material.map = t; mesh.material.needsUpdate = true;
+
+    const img = t.image;
+    if (img && img.width && img.height){
+      const naturalRatio = img.width / img.height;
+      const slotRatio = slotW / slotH;
+      let newW, newH;
+      if (naturalRatio >= slotRatio){
+        newW = slotW; newH = slotW / naturalRatio;
+      } else {
+        newH = slotH; newW = slotH * naturalRatio;
+      }
+      frame.geometry.dispose();
+      frame.geometry = new THREE.BoxGeometry(newW + 14, newH + 14, frameDepth);
+      gold.geometry.dispose();
+      gold.geometry = new THREE.PlaneGeometry(newW + 6, newH + 6);
+      mesh.geometry.dispose();
+      mesh.geometry = new THREE.PlaneGeometry(newW, newH);
+    }
   }, undefined, () => {});
 }
 
@@ -1190,14 +1247,10 @@ function updateCounter(){
   els.counter.innerHTML = `<span class="num">${openedSet.size}</span> / ${PHOTOS.length}`;
 }
 
-/* ═══════════════════════════════════════════════════════════
-   ФИНАЛ — 3 слайда. Размеры фото больше не задаются жёстко:
-   рамка подстраивается под реальные пропорции картинки.
-   ═══════════════════════════════════════════════════════════ */
 const FINALE_SLIDES = [
   { type: 'text', text: 'Год назад мы сказали друг другу «да».\nЭто был только первый год — а впереди вся жизнь.' },
   { type: 'photo', src: 'daughter.png', caption: '7 июля 2026 года родилась Анна.\nИ нас стало больше.' },
-  { type: 'final', src: 'family.jpg',   text: 'Теперь нас пятеро.\nИ это только начало.' }
+  { type: 'final', src: 'family.jpg', text: 'Теперь нас пятеро.\nИ это только начало.' }
 ];
 
 let slideIndex = 0;
@@ -1216,26 +1269,6 @@ function updateDots(){
   [...els.finaleDots.children].forEach((d, i) => d.classList.toggle('active', i === slideIndex));
 }
 
-/* Подгоняем рамку под реальные пропорции картинки после её загрузки */
-function sizeWrapToImage(wrap, img){
-  const nw = img.naturalWidth || 1;
-  const nh = img.naturalHeight || 1;
-  const r = nw / nh;
-
-  const maxW = Math.min(window.innerWidth * 0.86, 480);
-  const maxH = window.innerHeight * 0.58;
-
-  let w = maxW;
-  let h = w / r;
-  if (h > maxH){
-    h = maxH;
-    w = h * r;
-  }
-  wrap.style.width = Math.round(w) + 'px';
-  wrap.style.height = Math.round(h) + 'px';
-  wrap.style.aspectRatio = 'auto';
-}
-
 function renderSlide(s){
   const inner = els.finaleInner;
   inner.innerHTML = '';
@@ -1250,32 +1283,16 @@ function renderSlide(s){
   }
   const wrap = document.createElement('div');
   wrap.className = 'finale-photo-wrap';
-  /* Предварительно выставляем вертикальное соотношение, чтобы не дёргалось до загрузки */
-  wrap.style.width = Math.round(Math.min(window.innerWidth * 0.86, 480)) + 'px';
-  wrap.style.height = Math.round(Math.min(window.innerWidth * 0.86, 480) * 1.1) + 'px';
-
   const img = document.createElement('img');
   img.className = 'finale-photo';
   img.src = s.src;
   img.alt = '';
-
   const ph = document.createElement('div');
   ph.className = 'finale-photo-ph';
   ph.innerHTML = `<svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="14" width="52" height="38" rx="3"/><circle cx="32" cy="33" r="10"/><path d="M22 14 l3 -5 h14 l3 5"/></svg><p>${s.src}</p>`;
-
-  img.addEventListener('load', () => {
-    /* Обрезаем точно по картинке — без растяжения, без чёрных полос */
-    sizeWrapToImage(wrap, img);
-    img.style.display = 'block';
-    ph.style.display = 'none';
-  });
-  img.addEventListener('error', () => {
-    img.style.display = 'none';
-    ph.style.display = 'flex';
-  });
-
-  wrap.appendChild(img);
-  wrap.appendChild(ph);
+  img.addEventListener('error', () => { img.style.display = 'none'; ph.style.display = 'flex'; });
+  img.addEventListener('load', () => { img.style.display = 'block'; ph.style.display = 'none'; });
+  wrap.appendChild(img); wrap.appendChild(ph);
   inner.appendChild(wrap);
 
   if (s.caption){
@@ -1394,7 +1411,61 @@ if (els.uiNames){
 els.easterClose.addEventListener('click', () => els.easterEgg.classList.remove('show'));
 els.easterEgg.addEventListener('click', (e) => { if (e.target === els.easterEgg) els.easterEgg.classList.remove('show'); });
 
-let audioCtx = null; let audioGain = null; let audioMuted = false;
+/* ═══════════════════════════════════════════════════════════
+   Амбиентный звук: тёплый шум свечей + романтичное пианино
+   ═══════════════════════════════════════════════════════════ */
+let audioCtx = null;
+let audioGain = null;
+let musicGain = null;
+let musicTimer = null;
+let audioMuted = false;
+
+function startRomanticMusic(){
+  if (!audioCtx || musicGain) return;
+  musicGain = audioCtx.createGain();
+  musicGain.gain.value = 0;
+  musicGain.gain.setTargetAtTime(0.045, audioCtx.currentTime, 2.5);
+  musicGain.connect(audioCtx.destination);
+
+  // I – V – vi – IV (C – G – Am – F)
+  const chords = [
+    [261.63, 329.63, 392.00, 523.25],
+    [196.00, 246.94, 293.66, 392.00],
+    [220.00, 261.63, 329.63, 440.00],
+    [174.61, 220.00, 261.63, 349.23]
+  ];
+  const beat = 0.72;
+  const chordDur = beat * 4;
+  let nextTime = audioCtx.currentTime + 0.8;
+
+  function playNote(freq, time, dur, gainMul){
+    if (!musicGain) return;
+    const osc = audioCtx.createOscillator();
+    osc.type = 'triangle';
+    osc.frequency.value = freq;
+    const g = audioCtx.createGain();
+    g.gain.setValueAtTime(0, time);
+    g.gain.linearRampToValueAtTime(0.11 * gainMul, time + 0.09);
+    g.gain.exponentialRampToValueAtTime(0.0007, time + dur);
+    osc.connect(g); g.connect(musicGain);
+    osc.start(time); osc.stop(time + dur + 0.15);
+  }
+
+  function schedule(){
+    while (nextTime < audioCtx.currentTime + 6){
+      const chord = chords[Math.floor(Math.random() * chords.length)];
+      playNote(chord[0] / 2, nextTime, chordDur * 0.9, 0.55);
+      const pattern = [0, 1, 2, 3, 2, 1, 2, 3];
+      pattern.forEach((idx, i) => {
+        const oct = (i >= 4) ? 2 : 1;
+        playNote(chord[idx] * oct, nextTime + i * (chordDur / 8), beat * 1.6, 0.35);
+      });
+      nextTime += chordDur;
+    }
+  }
+  schedule();
+  musicTimer = setInterval(schedule, 3000);
+}
 
 function createAmbientSound(){
   try {
@@ -1420,13 +1491,16 @@ function createAmbientSound(){
     const osc = audioCtx.createOscillator(); osc.type = 'sine'; osc.frequency.value = 110;
     const oscGain = audioCtx.createGain(); oscGain.gain.value = 0.008;
     osc.connect(oscGain).connect(audioCtx.destination); osc.start();
+
+    startRomanticMusic();
   } catch(_){}
 }
 function toggleMute(){
   if (!audioCtx) return;
   audioMuted = !audioMuted;
   els.muteBtn.classList.toggle('muted', audioMuted);
-  if (audioGain){ audioGain.gain.setTargetAtTime(audioMuted ? 0 : 0.055, audioCtx.currentTime, 0.25); }
+  if (audioGain) audioGain.gain.setTargetAtTime(audioMuted ? 0 : 0.055, audioCtx.currentTime, 0.25);
+  if (musicGain) musicGain.gain.setTargetAtTime(audioMuted ? 0 : 0.045, audioCtx.currentTime, 0.4);
 }
 els.muteBtn.addEventListener('click', (e) => {
   e.stopPropagation();
@@ -1482,6 +1556,7 @@ function animate(){
 
 window.addEventListener('resize', () => {
   camera.aspect = window.innerWidth / window.innerHeight;
+  camera.fov = (window.innerWidth < 700) ? 92 : 78;
   camera.updateProjectionMatrix();
   renderer.setSize(window.innerWidth, window.innerHeight);
   if (composer) composer.setSize(window.innerWidth, window.innerHeight);
@@ -1541,6 +1616,10 @@ init().catch(e => {
   console.error('init() failed:', e);
   if (els.loader){ els.loader.classList.add('hide'); setTimeout(() => { els.loader.style.display = 'none'; }, 700); }
 });
+
+/* Предзагрузка финальных изображений и всех фото комнаты */
+PHOTOS.forEach(p => { const i = new Image(); i.src = p.src; });
+['daughter.png', 'family.jpg'].forEach(src => { const i = new Image(); i.src = src; });
 
 let doorOpened = false;
 function openDoor(){
