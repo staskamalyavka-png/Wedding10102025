@@ -1408,7 +1408,7 @@ function startMusic(){
   audioEl.muted = audioMuted;
   const p = audioEl.play();
   if (p && p.catch){
-    p.then(() => { fadeInMusic(0.32, 2500); })
+    p.then(() => { fadeInMusic(0.2, 2500); })
      .catch((err) => { console.warn('Автозапуск музыки заблокирован браузером:', err); });
   } else {
     fadeInMusic(0.32, 2500);
