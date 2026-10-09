@@ -28,7 +28,7 @@ html,body{
 button{font-family:inherit;border:0;background:transparent;cursor:pointer;color:inherit;-webkit-tap-highlight-color:transparent;}
 canvas{display:block;position:fixed;inset:0;touch-action:none;}
 
-.loader{position:fixed;inset:0;z-index:9999;display:flex;align-items:center;justify-content:center;background:radial-gradient(circle at 50% 40%, #faf3e6 0%, #e8dcc6 100%);transition:opacity .7s,visibility .7s;}
+.loader{position:fixed;inset:0;z-index:9999;display:flex;align-items:center;justify-content:center;background:radial-gradient(circle at 50% 40%, #faf3e6 0%, #e8dcc6 100%);transition:opacity .7s,visibility .7s;cursor:wait;}
 .loader.hide{opacity:0;visibility:hidden;pointer-events:none;}
 .loader-inner{text-align:center;padding:0 24px;max-width:640px;}
 .loader-script{font-family:var(--font-script);font-size:clamp(40px,10vw,68px);color:var(--ink);margin-bottom:22px;opacity:0;animation:fu .9s ease .1s forwards;line-height:1.05;}
@@ -36,6 +36,8 @@ canvas{display:block;position:fixed;inset:0;touch-action:none;}
 .loader-names{font-family:var(--font-title);font-style:italic;font-weight:500;font-size:clamp(24px,5.5vw,34px);color:var(--gold-deep);margin-bottom:12px;opacity:0;animation:fu .9s ease .55s forwards;}
 .loader-date{font-size:11px;letter-spacing:.5em;text-transform:uppercase;color:rgba(58,36,24,.65);padding-left:.5em;opacity:0;animation:fu .9s ease .75s forwards;}
 .loader-hint{font-family:var(--font-soft);font-size:clamp(20px,4.5vw,26px);color:rgba(58,36,24,.6);margin-top:22px;opacity:0;animation:fu .9s ease 1.1s forwards;line-height:1.35;}
+.loader-progress{margin-top:18px;width:min(280px,62vw);height:2px;background:rgba(200,162,74,.2);border-radius:1px;overflow:hidden;opacity:0;animation:fu .9s ease 1.3s forwards;margin-left:auto;margin-right:auto;}
+.loader-progress-fill{height:100%;width:0%;background:linear-gradient(90deg,var(--gold),var(--gold-deep));transition:width .3s ease;}
 @keyframes fu{from{opacity:0;transform:translateY(12px);}to{opacity:1;transform:none;}}
 @keyframes gl{from{width:0;}to{width:min(320px,62vw);}}
 
@@ -188,30 +190,14 @@ canvas{display:block;position:fixed;inset:0;touch-action:none;}
 </head>
 <body>
 
-<script>
-(function(){
-  var startTs = Date.now();
-  setInterval(function(){
-    if (window.__threeStarted) return;
-    var loader = document.getElementById('loader');
-    if (!loader || loader.classList.contains('hide')) return;
-    var hint = document.getElementById('loaderHint');
-    if (!hint) return;
-    var el = (Date.now() - startTs) / 1000;
-    if (el > 4 && el <= 10) hint.textContent = 'Загружаем 3D-комнату…';
-    if (el > 10 && el <= 20) hint.textContent = 'Медленное соединение. Ещё немного…';
-    if (el > 20) hint.textContent = 'Проверьте интернет и обновите страницу.';
-  }, 800);
-})();
-</script>
-
 <div class="loader" id="loader" aria-hidden="true">
   <div class="loader-inner">
     <p class="loader-script">Максим &amp; Анастасия</p>
     <div class="loader-hair"></div>
     <p class="loader-names">Комната воспоминаний</p>
     <p class="loader-date">10 октября 2025</p>
-    <p class="loader-hint" id="loaderHint">Сейчас дверь откроется…</p>
+    <p class="loader-hint" id="loaderHint">Подготовка комнаты…</p>
+    <div class="loader-progress"><div class="loader-progress-fill" id="loaderProgressFill"></div></div>
   </div>
 </div>
 
@@ -345,8 +331,13 @@ const MAIN_PHOTOS = [PHOTOS[0], PHOTOS[1]];
 const VERTICAL_PHOTOS = [PHOTOS[2], PHOTOS[3], PHOTOS[4]];
 const HORIZONTAL_PHOTOS = PHOTOS.slice(5);
 
+const FINALE_IMAGES = ['daughter.png', 'family.jpg'];
+const MUSIC_FILE = 'music.mp3';
+
 const els = {
   loader: document.getElementById('loader'),
+  loaderHint: document.getElementById('loaderHint'),
+  loaderProgressFill: document.getElementById('loaderProgressFill'),
   doorScreen: document.getElementById('doorScreen'),
   counter: document.getElementById('uiCounter'),
   viewer: document.getElementById('viewer'),
@@ -892,9 +883,6 @@ function buildCandles(){
     [-160, 200], [160, 200],
     [-160, 400], [160, 400]
   ];
-  /* ФИКС: на мобильном удаляем целые ПАРЫ кластеров (левая+правая вместе),
-     а не каждый второй по индексу. Раньше фильтр i%2===0 оставлял только
-     левые кластеры, потому что массив составлен чередованием левая-правая. */
   const clusters = IS_MOBILE
     ? allClusters.filter((_, i) => Math.floor(i / 2) % 2 === 0)
     : allClusters;
@@ -1369,24 +1357,73 @@ els.easterClose.addEventListener('click', () => els.easterEgg.classList.remove('
 els.easterEgg.addEventListener('click', (e) => { if (e.target === els.easterEgg) els.easterEgg.classList.remove('show'); });
 
 /* ═══════════════════════════════════════════════════════════
-   Звук: готовая музыка из файла music.mp3 рядом с index.html
-   Потрескивание и Web Audio убраны полностью.
+   Предзагрузка: 36 фото + 2 финальных + музыка.
+   Дверь не откроется, пока всё не загрузится.
+   ═══════════════════════════════════════════════════════════ */
+const preloadState = { total: 0, loaded: 0, done: false };
+const preloadPromises = [];
+let preloadedAudio = null;
+
+function updateLoaderProgress(){
+  if (!els.loaderHint || !els.loaderProgressFill) return;
+  const pct = preloadState.total === 0 ? 0 : Math.round((preloadState.loaded / preloadState.total) * 100);
+  els.loaderHint.textContent = `Загружено ${preloadState.loaded} из ${preloadState.total}`;
+  els.loaderProgressFill.style.width = pct + '%';
+}
+
+function addImage(src){
+  preloadState.total++;
+  return new Promise((resolve) => {
+    const img = new Image();
+    let resolved = false;
+    const done = () => {
+      if (resolved) return;
+      resolved = true;
+      preloadState.loaded++;
+      updateLoaderProgress();
+      resolve();
+    };
+    img.addEventListener('load', done, { once: true });
+    img.addEventListener('error', done, { once: true });
+    /* На случай, если браузер вообще не ответит (медленный интернет) */
+    setTimeout(done, 15000);
+    img.src = src;
+  });
+}
+
+function addAudio(src){
+  preloadState.total++;
+  return new Promise((resolve) => {
+    const a = new Audio();
+    a.preload = 'auto';
+    a.loop = true;
+    a.volume = 0;
+    let resolved = false;
+    const done = () => {
+      if (resolved) return;
+      resolved = true;
+      preloadState.loaded++;
+      updateLoaderProgress();
+      preloadedAudio = a;
+      resolve();
+    };
+    a.addEventListener('canplaythrough', done, { once: true });
+    a.addEventListener('canplay', done, { once: true });
+    a.addEventListener('loadeddata', done, { once: true });
+    a.addEventListener('error', done, { once: true });
+    setTimeout(done, 12000);
+    a.src = src;
+    a.load();
+  });
+}
+
+/* ═══════════════════════════════════════════════════════════
+   Музыка: громкость 0.1, файл music.mp3
    ═══════════════════════════════════════════════════════════ */
 let audioEl = null;
 let audioMuted = false;
 let audioStarted = false;
-
-function ensureAudio(){
-  if (audioEl) return;
-  audioEl = new Audio();
-  audioEl.src = 'music.mp3';
-  audioEl.loop = true;
-  audioEl.preload = 'auto';
-  audioEl.volume = 0;
-  audioEl.addEventListener('error', () => {
-    console.warn('music.mp3 не найден или не поддерживается — тишина в комнате.');
-  });
-}
+const MUSIC_VOLUME = 0.1;
 
 function fadeInMusic(target, duration){
   if (!audioEl) return;
@@ -1402,21 +1439,20 @@ function fadeInMusic(target, duration){
 }
 
 function startMusic(){
-  ensureAudio();
-  if (!audioEl) return;
+  if (!preloadedAudio) return;
+  audioEl = preloadedAudio;
   audioStarted = true;
   audioEl.muted = audioMuted;
   const p = audioEl.play();
   if (p && p.catch){
-    p.then(() => { fadeInMusic(0.2, 2500); })
+    p.then(() => { fadeInMusic(MUSIC_VOLUME, 2500); })
      .catch((err) => { console.warn('Автозапуск музыки заблокирован браузером:', err); });
   } else {
-    fadeInMusic(0.32, 2500);
+    fadeInMusic(MUSIC_VOLUME, 2500);
   }
 }
 
 function toggleMute(){
-  ensureAudio();
   audioMuted = !audioMuted;
   els.muteBtn.classList.toggle('muted', audioMuted);
   if (!audioEl) return;
@@ -1427,8 +1463,8 @@ function toggleMute(){
 }
 els.muteBtn.addEventListener('click', (e) => {
   e.stopPropagation();
-  if (!audioStarted) startMusic();
-  else toggleMute();
+  if (!audioStarted) { startMusic(); return; }
+  toggleMute();
 });
 
 const clock = new THREE.Clock();
@@ -1485,13 +1521,6 @@ window.addEventListener('resize', () => {
 });
 
 async function init(){
-  const safetyTimer = setTimeout(() => {
-    if (els.loader && !els.loader.classList.contains('hide')){
-      els.loader.classList.add('hide');
-      setTimeout(() => { els.loader.style.display = 'none'; }, 700);
-    }
-  }, 3000);
-
   try {
     if (document.fonts && document.fonts.load){
       try {
@@ -1528,23 +1557,39 @@ async function init(){
   }
 
   updateCounter();
-  clearTimeout(safetyTimer);
+
+  /* ── Предзагрузка ── */
+  PHOTOS.forEach(p => preloadPromises.push(addImage(p.src)));
+  FINALE_IMAGES.forEach(src => preloadPromises.push(addImage(src)));
+  preloadPromises.push(addAudio(MUSIC_FILE));
+  updateLoaderProgress();
+
+  /* Ждём загрузку всех ресурсов. Картинки/аудио имеют собственные таймауты
+     (15s и 12s), поэтому Promise.all разрешится в разумный срок даже при проблемах. */
+  try {
+    await Promise.all(preloadPromises);
+  } catch(_){}
+
+  preloadState.done = true;
+  els.loaderHint.textContent = 'Готово. Входите…';
+  els.loaderProgressFill.style.width = '100%';
+
+  /* Небольшая пауза, чтобы пользователь увидел 100%, потом скрываем загрузчик */
   window.setTimeout(() => {
     els.loader.classList.add('hide');
     window.setTimeout(() => { els.loader.style.display = 'none'; }, 700);
-  }, 1600);
+  }, 400);
 }
 init().catch(e => {
   console.error('init() failed:', e);
   if (els.loader){ els.loader.classList.add('hide'); setTimeout(() => { els.loader.style.display = 'none'; }, 700); }
+  preloadState.done = true;
 });
-
-PHOTOS.forEach(p => { const i = new Image(); i.src = p.src; });
-['daughter.png', 'family.jpg'].forEach(src => { const i = new Image(); i.src = src; });
 
 let doorOpened = false;
 function openDoor(){
   if (doorOpened) return;
+  if (!preloadState.done) return; /* защита: не открываем до готовности */
   doorOpened = true;
   els.doorScreen.classList.add('opening');
   window.setTimeout(() => {
