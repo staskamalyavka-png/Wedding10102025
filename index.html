@@ -1379,7 +1379,7 @@ els.easterClose.addEventListener('click', () => els.easterEgg.classList.remove('
 els.easterEgg.addEventListener('click', (e) => { if (e.target === els.easterEgg) els.easterEgg.classList.remove('show'); });
 
 /* ═══════════════════════════════════════════════════════════
-   Предзагрузка: 36 фото + 2 финальных + музыка.
+   Предзагрузка: 36 фото + 2 финальных + музыка = 39.
    Таймаут 30 сек на картинку. При ошибках — кнопки
    «Ждать ещё» / «Войти всё равно».
    ═══════════════════════════════════════════════════════════ */
@@ -1471,17 +1471,17 @@ function addAudio(src, isRetry = false){
 }
 
 async function runPreload(){
-  preloadState.total = PHOTOS.length + FINALE_IMAGES.length + 1;
+  preloadState.total = 0;
   preloadState.ok = 0;
   preloadState.errors.length = 0;
   failedItems.length = 0;
-  updateLoaderProgress();
 
   const tasks = [];
   PHOTOS.forEach(p => tasks.push(addImage(p.src)));
   FINALE_IMAGES.forEach(src => tasks.push(addImage(src)));
   tasks.push(addAudio(MUSIC_FILE));
 
+  updateLoaderProgress();
   await Promise.all(tasks);
   preloadState.done = true;
 
@@ -1500,13 +1500,23 @@ async function runPreload(){
 
 async function retryFailed(){
   if (failedItems.length === 0) { runPreload(); return; }
+
   loaderUi.actions.classList.remove('show');
   loaderUi.err.classList.remove('show');
-  els.loaderHint.textContent = 'Повторная попытка…';
+
+  const retryTotal = failedItems.length;
+  let retryDone = 0;
+  els.loaderHint.textContent = `Повторная попытка: 0 из ${retryTotal}`;
+  els.loaderProgressFill.style.width = '0%';
 
   const tasks = failedItems.map(item => {
-    if (item.type === 'image') return addImage(item.src, true);
-    return addAudio(item.src, true);
+    const p = item.type === 'image' ? addImage(item.src, true) : addAudio(item.src, true);
+    return p.then(() => {
+      retryDone++;
+      const pct = Math.round((retryDone / retryTotal) * 100);
+      els.loaderHint.textContent = `Повторная попытка: ${retryDone} из ${retryTotal}`;
+      els.loaderProgressFill.style.width = pct + '%';
+    });
   });
   await Promise.all(tasks);
 
